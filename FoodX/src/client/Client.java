@@ -1,85 +1,46 @@
 package client;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 
-import restaurant.Menu;
 import restaurant.Restaurant;
-import restaurant.RestaurantList;
 
 public class Client {
-	private ObjectOutputStream clientOutputStream;
-	private ObjectInputStream clientInputStream;
+//	private ObjectOutputStream clientOutputStream;
+//	private ObjectInputStream clientInputStream;
 	private Socket socket;
-	public Client(String hostname, int port){
+	private ClientThread ct;
+	public Client(){
 		socket = null;
 		try {
-			socket = new Socket(hostname, port);
-			ClientThread ct = new ClientThread(socket, this);
-			clientInputStream = new ObjectInputStream (socket.getInputStream());
-			clientOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			
+			socket = new Socket("localhost", 6789);
+			ct = new ClientThread(socket, this);
 		} catch (IOException e) {
 			System.out.println("IOE Exception while initialising Socket: " + e.getMessage());
 		}
 		
 	}
+
+
 	
-	public void sendRestaurantRequest(int zipcode){
-		try {
-			clientOutputStream.writeObject(zipcode);
-			// always flush, lol.
-			clientOutputStream.flush();
-		} catch (IOException ioe) {
-			System.out.println ("IOE Exception Occured in sendRequest: " + ioe.getMessage());
-		}
+	public ArrayList<Restaurant> getRestaurantlist(String zipcode){
+		System.out.println("Restaurant Request Recieved");
+		return ct.getRestaurant(zipcode);
 		
 	}
 	
-	public RestaurantList getRestaurantlist(){
-		RestaurantList list = null;
-		try {
-			Object obj = clientInputStream.readObject();
-			if (obj instanceof RestaurantList){
-				list = (RestaurantList) clientInputStream.readObject();
-			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return list;
-		
-	}
-	
-	public void sendMenuRequest(Restaurant restaurant){
-		try {
-			clientOutputStream.writeObject(restaurant);
-			clientOutputStream.flush();
-		} catch (IOException ioe) {
-			System.out.println ("IOE Exception Occured in sendRequest: " + ioe.getMessage());
-		}
-		
-	}
-	
-	public Menu getMenu(){
-		Menu list = null;
-		try {
-			Object obj = clientInputStream.readObject();
-			if (obj instanceof Menu){
-				list = (Menu) clientInputStream.readObject();
-			}
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return list;
-		
-	}
-	
+//	public void sendMenuRequest(Restaurant restaurant){
+//		try {
+//			clientOutputStream.writeObject(restaurant);
+//			clientOutputStream.flush();
+//		} catch (IOException ioe) {
+//			System.out.println ("IOE Exception Occured in sendRequest: " + ioe.getMessage());
+//		}
+//		
+//	}
+//	
+
 	
 	
 	public static void main(String args[]){
