@@ -17,6 +17,7 @@ public class Client {
 		socket = null;
 		try {
 			socket = new Socket(hostname, port);
+			ClientThread ct = new ClientThread(socket, this);
 			clientInputStream = new ObjectInputStream (socket.getInputStream());
 			clientOutputStream = new ObjectOutputStream(socket.getOutputStream());
 			
