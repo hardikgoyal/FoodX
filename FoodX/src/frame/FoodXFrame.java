@@ -1,15 +1,9 @@
 package frame;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Desktop;
-import java.awt.GradientPaint;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -26,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 
 import client.Client;
 import restaurant.Restaurant;
@@ -34,6 +29,11 @@ import restaurant.Restaurant;
 
 public class FoodXFrame extends JFrame {
 	private static final long serialVersionUID = 9183816558021947333L;
+	public static void main(String[] args) {
+		FoodXFrame fxf = new FoodXFrame();
+		fxf.setVisible(true);
+	}
+
 	private JTextField zipCodeEnter;
 
 	public FoodXFrame() {
@@ -59,11 +59,6 @@ public class FoodXFrame extends JFrame {
 		displayRestaurants();
 	}
 
-	public static void main(String[] args) {
-		FoodXFrame fxf = new FoodXFrame();
-		fxf.setVisible(true);
-	}
-
 	public void displayRestaurants() {
 		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
 		Restaurant r = new Restaurant("Wokcano", "123 Horsed Ave.", "123-456-7890",
@@ -73,8 +68,8 @@ public class FoodXFrame extends JFrame {
 		// Restaurant r2 = new Restaurant("Wokcano", "123 Horsed Ave.",
 		// "123-456-7890",
 		// "https://www.grubhub.com/restaurant/wokcano-800-w-7th-st-los-angeles/78645");
-		//list.add(r);
-		//list.add(r1);
+		// list.add(r);
+		// list.add(r1);
 		// list.add(r2);
 
 		URL url = null;
@@ -82,16 +77,16 @@ public class FoodXFrame extends JFrame {
 		ImageIcon ic = null;
 		Image image1 = null;
 		Image newImage = null;
-		
+
 		Client cd = new Client();
 		list = cd.getRestaurantlist("90007");
 		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
-		for(int i = 0; i < list.size(); i++){
-			if (i==0){
+		for (int i = 0; i < list.size(); i++) {
+			if (i == 0) {
 				break;
 			}
 			Restaurant curr = list.get(i);
-			
+
 			try {
 				url = new URL("http://www.lasplash.com/uploads//3/wokcano_restaurants_logo.jpg");
 			} catch (MalformedURLException e1) {
@@ -103,20 +98,25 @@ public class FoodXFrame extends JFrame {
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
-	
+
 			image1 = ic.getImage();
 			newImage = image1.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
 			ic = new ImageIcon(newImage);
-	
-			JLabel label = new JLabel("", ic, JLabel.CENTER);
-	
+
+			JLabel label = new JLabel("", ic, SwingConstants.CENTER);
+
 			label.addMouseListener(new MouseAdapter() {
+				@Override
 				public void mouseClicked(MouseEvent e) {
 					System.out.println("Click at: " + e.getPoint());
 					Desktop d = Desktop.getDesktop();
-					try { d.browse(new URI(curr.getOrderURL())); } 
-					catch (IOException e1) { e1.printStackTrace(); } 
-					catch (URISyntaxException e1) { e1.printStackTrace(); }
+					try {
+						d.browse(new URI(curr.getOrderURL()));
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						e1.printStackTrace();
+					}
 				}
 			});
 			JPanel restaurantBox = new JPanel();

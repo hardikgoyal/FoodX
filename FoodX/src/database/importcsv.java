@@ -10,10 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 public class importcsv {
-	public static void main(String args[]) throws IOException{
+	public static void main(String args[]) throws IOException {
 		BufferedReader reader = Files.newBufferedReader(Paths.get("resources/zipcode.csv"));
 		String str = "";
-		str=reader.readLine();
+		str = reader.readLine();
 		Connection conn = null;
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -24,20 +24,20 @@ public class importcsv {
 		} catch (SQLException e) {
 			System.out.println("SQLE: " + e.getMessage());
 		}
-		PreparedStatement  ps = null;
+		PreparedStatement ps = null;
 		try {
 			ps = conn.prepareStatement("INSERT INTO ZipcodeLatitude Values (?, ?, ?, ?, ?,? )");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		int i = 0;
-		while ((str= reader.readLine())!=null){
+		while ((str = reader.readLine()) != null) {
 			i++;
 			String line[] = str.split(",");
-			if (line.length<5){
+			if (line.length < 5) {
 				continue;
 			}
-			for (int l =0; l<6; l++){
+			for (int l = 0; l < 6; l++) {
 				line[l] = line[l].replaceAll("\"", "");
 			}
 

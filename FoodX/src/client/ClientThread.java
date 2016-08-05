@@ -14,66 +14,27 @@ import database.Message;
 import restaurant.Restaurant;
 
 public class ClientThread extends Thread {
-	private Lock mLock;
-	private Condition ListRecieved;
-	private ObjectOutputStream clientOutputStream;
 	private ObjectInputStream clientInputStream;
+	private ObjectOutputStream clientOutputStream;
+	private Condition ListRecieved;
+	private Lock mLock;
 	private ArrayList<Restaurant> reslist;
+
 	public ClientThread(Socket socket, Client client) {
 		mLock = new ReentrantLock();
 		ListRecieved = mLock.newCondition();
 		reslist = null;
 		try {
 			clientOutputStream = new ObjectOutputStream(socket.getOutputStream());
-			clientInputStream = new ObjectInputStream (socket.getInputStream());
+			clientInputStream = new ObjectInputStream(socket.getInputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		start();
 	}
-	
-	@Override
-	public void run(){
-		while (true){
-			Message obj = null;
-			try {
-				obj = (Message) clientInputStream.readObject();
-				System.out.println("Recieved Something: " + obj==null );
-			}catch (EOFException e){} 
-			catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-			if (obj!=null)
-			interpretMessage(obj);
-			
-		}
-	}
-
-	private void interpretMessage(Message obj) {
-		try{
-			mLock.lock();
-			int id = obj.getMessageID();
-			System.out.println("Message Recieved");
-			switch (id){
-			
-			// Restaurant
-			case 1: reslist = obj.getRestaurant();
-			ListRecieved.signalAll();
-			System.out.println("reslist initialised");
-				break;
-			default: System.out.println("Default");
-			}
-		}
-		finally{
-			mLock.unlock();
-		}
-		
-		
-	}
-	
 
 	public ArrayList<Restaurant> getRestaurant(String zipcode) {
-		try{
+		try {
 			mLock.lock();
 			System.out.println("In Client Thread Restaurnat");
 			Message obj = new Message();
@@ -89,15 +50,53 @@ public class ClientThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+
 			System.out.println("Request returned");
-		} finally{
+		} finally {
 			mLock.unlock();
-			
+
 		}
 		return reslist;
-		
-		
+
 	}
-	
+
+	private void interpretMessage(Message obj) {
+		try {
+			mLock.lock();
+			int id = obj.getMessageID();
+			System.out.println("Message Recieved");
+			switch (id) {
+
+			// Restaurant
+			case 1:
+				reslist = obj.getRestaurant();
+				ListRecieved.signalAll();
+				System.out.println("reslist initialised");
+				break;
+			default:
+				System.out.println("Default");
+			}
+		} finally {
+			mLock.unlock();
+		}
+
+	}
+
+	@Override
+	public void run() {
+		while (true) {
+			Message obj = null;
+			try {
+				obj = (Message) clientInputStream.readObject();
+				System.out.println("Recieved Something: " + obj == null);
+			} catch (EOFException e) {
+			} catch (ClassNotFoundException | IOException e) {
+				e.printStackTrace();
+			}
+			if (obj != null)
+				interpretMessage(obj);
+
+		}
+	}
+
 }

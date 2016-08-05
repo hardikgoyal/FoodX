@@ -5,26 +5,25 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
+	public static void main(String args[]) {
+		new Server(6789);
+	}
+
 	private ServerSocket socket;
-	
-	public Server(int port){
+
+	public Server(int port) {
 		try {
 			socket = new ServerSocket(port);
-			while(true){
+			while (true) {
 				Socket s = socket.accept();
 				new ServerThread(s, this);
-				
+
 			}
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public static void main(String args[]){
-		new Server(6789);
-	}
-	
-	
+
 }
