@@ -9,7 +9,6 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-
 public class importcsv {
 	public static void main(String args[]) throws IOException{
 		BufferedReader reader = Files.newBufferedReader(Paths.get("resources/zipcode.csv"));
@@ -29,7 +28,6 @@ public class importcsv {
 		try {
 			ps = conn.prepareStatement("INSERT INTO ZipcodeLatitude Values (?, ?, ?, ?, ?,? )");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		int i = 0;
