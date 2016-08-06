@@ -42,13 +42,11 @@ public class ClientThread extends Thread {
 	public ArrayList<Restaurant> getRestaurant(String zipcode) {
 		try {
 			mLock.lock();
-			System.out.println("In Client Thread Restaurnat");
 			Message obj = new Message();
 			obj.setMessageID(3);
 			obj.setZipcode(zipcode);
 			try {
 				clientOutputStream.writeObject(obj);
-				System.out.println("Request Sent");
 				ListRecieved.await();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -56,13 +54,9 @@ public class ClientThread extends Thread {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-
-			System.out.println("Request returned");
 		} finally {
 			mLock.unlock();
-
 		}
-		System.out.println(reslist.size());
 		return reslist;
 
 	}

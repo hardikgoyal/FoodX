@@ -29,12 +29,8 @@ public class ServerThread extends Thread {
 
 	private void fetchData(String zipcode) {
 		DataFetcher dt = new DataFetcher();
-
 		ArrayList<Restaurant> res = new ArrayList<Restaurant>();
-		System.out.println("Fetching Data");
-
 		res = dt.fetch(zipcode);
-		System.out.println("Data Recieved");
 		Message obj = new Message();
 		obj.setMessageID(3);
 		obj.setRestaurant(res);
@@ -43,7 +39,6 @@ public class ServerThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Exiting");
 
 	}
 
@@ -87,12 +82,16 @@ public class ServerThread extends Thread {
 	private void processRegister(Message obj) {
 		Message obj1 = new Message();
 		obj1.setMessageID(2);
+<<<<<<< HEAD
 		if (sd.Register_User(obj.getUser(), obj.getPassword())){
 			obj1.setMessage("Registered");
 		}
 		else{
 			obj1.setMessage("Not Registered");
 		}
+=======
+		obj1.setMessage (sd.Register_User(obj.getUser(), obj.getPassword()));
+>>>>>>> c8f38c0f6146f63c2128b01aa3e551a300cf70ed
 		try {
 			serverOutputStream.writeObject(obj1);
 		} catch (IOException e) {
