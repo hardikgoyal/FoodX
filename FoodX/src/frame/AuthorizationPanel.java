@@ -49,6 +49,7 @@ public class AuthorizationPanel extends JFrame {
 		setSize(640,480);
 		setLocation(200,200);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 		cl = new Client();
 		
 		//Interactive Options
@@ -88,6 +89,7 @@ public class AuthorizationPanel extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String usernameText = usernameBox.getText();
+				//String realpassword = passwordBox.getText();
 				String passwordText = encryption(passwordBox.getText());
 				System.out.println(passwordText);
 				boolean isTyped = checkTyped(usernameText, passwordText); // function to see if user put in information in the text and password fields
@@ -145,8 +147,6 @@ public class AuthorizationPanel extends JFrame {
 	
 	public boolean checkTyped(String u, String p){
 		if (u == null|| u.isEmpty() || p == null || p.isEmpty()){
-			
-			
 			UIManager UI=new UIManager();
 			 UI.put("OptionPane.background", Color.green);
 			 UI.put("Panel.background", Color.green);

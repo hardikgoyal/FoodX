@@ -18,6 +18,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.UIManager;
 
@@ -40,6 +41,7 @@ public class NewUser extends JFrame {
 		setLocation(200,200);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBackground(Color.YELLOW);
+		setResizable(false);
 		cl = new Client();
 		
 		//GradientPanel gradientPanel = new GradientPanel();
@@ -60,10 +62,10 @@ public class NewUser extends JFrame {
 		username1 = new JTextField(20);
 		
 		JLabel password = new JLabel("PASSWORD ");
-		password1 = new JTextField(20);
+		password1 = new JPasswordField(20);
 		
 		JLabel repeat = new JLabel("REPEAT       ");
-		repeat1 = new JTextField(20);
+		repeat1 = new JPasswordField(20);
 		
 		JButton loginButton = new JButton("CREATE NEW USER"); 
 		
@@ -96,6 +98,7 @@ public class NewUser extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				String usernameText = username1.getText();
+				String realpassword = password1.getText();
 				String passwordText = encryption(password1.getText());
 				String repeatText = encryption(repeat1.getText());
 				boolean isSame = comparePasswords(passwordText, repeatText);
@@ -103,7 +106,7 @@ public class NewUser extends JFrame {
 					displayWarning1();
 				}
 				else{
-					boolean meetsCriteria = checkCriteria(passwordText);
+					boolean meetsCriteria = checkCriteria(realpassword);
 					if (meetsCriteria == false){
 						displayWarning2();
 					}
