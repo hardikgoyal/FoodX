@@ -17,12 +17,18 @@ public class ClientThread extends Thread {
 	private ObjectInputStream clientInputStream;
 	private ObjectOutputStream clientOutputStream;
 	private Condition ListRecieved;
+	private Condition userLogin;
+	private Condition userRegistration;
 	private Lock mLock;
 	private ArrayList<Restaurant> reslist;
-
+	private String message;
 	public ClientThread(Socket socket, Client client) {
 		mLock = new ReentrantLock();
+		message = "";
 		ListRecieved = mLock.newCondition();
+		userLogin = mLock.newCondition();
+		userRegistration = mLock.newCondition();
+		
 		reslist = null;
 		try {
 			clientOutputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -73,6 +79,8 @@ public class ClientThread extends Thread {
 				ListRecieved.signalAll();
 				System.out.println("reslist initialised");
 				break;
+			case 2: 
+				break;
 			default:
 				System.out.println("Default");
 			}
@@ -97,6 +105,54 @@ public class ClientThread extends Thread {
 				interpretMessage(obj);
 
 		}
+	}
+
+	public String register(String user, String password) {
+		String str = "";
+		mLock.lock();
+		try{
+			Message obj = new Message ();
+			obj.setMessageID(2);
+			obj.setUser(user);
+			obj.setPassword(password);
+			try {
+				clientOutputStream.writeObject(obj);
+				System.out.println("Request Sent");
+				ListRecieved.await();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Request returned");
+		} finally {
+			mLock.unlock();
+		}
+		return str;
+	}
+
+	public String authenticate(String user, String password) {
+		String str = "";
+		mLock.lock();
+		try{
+			Message obj = new Message ();
+			obj.setMessageID(1);
+			obj.setUser(user);
+			obj.setPassword(password);
+			try {
+				clientOutputStream.writeObject(obj);
+				System.out.println("Request Sent");
+				ListRecieved.await();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Request returned");
+		} finally {
+			mLock.unlock();
+		}
+		return str;
 	}
 
 }

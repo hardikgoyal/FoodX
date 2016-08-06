@@ -27,18 +27,16 @@ public class Client {
 
 	}
 
-	// public void sendMenuRequest(Restaurant restaurant){
-	// try {
-	// clientOutputStream.writeObject(restaurant);
-	// clientOutputStream.flush();
-	// } catch (IOException ioe) {
-	// System.out.println ("IOE Exception Occured in sendRequest: " +
-	// ioe.getMessage());
-	// }
-	//
-	// }
-	//
 
+	public String authenticate_user(String user, String password){
+		String res = ct.authenticate(user, password);
+		return res;
+	}
+	
+	public String register_user(String user, String password){
+		String res = ct.register(user, password);
+		return res;
+	}
 	public ArrayList<Restaurant> getRestaurantlist(String zipcode) {
 		System.out.println("Restaurant Request Recieved");
 		return ct.getRestaurant(zipcode);
