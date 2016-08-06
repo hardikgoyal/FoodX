@@ -7,8 +7,11 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -19,6 +22,7 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,12 +47,13 @@ public class FoodXFrame extends JFrame {
 	private JPanel gridHolder;
 	private GridBagConstraints gbc;
 	private JScrollPane jsp;
+	private Box un;
 
 	public FoodXFrame() {
 
 		// MAIN GUI
 		setTitle("Welcome to FoodX");
-		setSize(640, 480);
+		setSize(860, 580);
 		setLocation(200, 200);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -56,19 +61,45 @@ public class FoodXFrame extends JFrame {
 		JLabel zipCodeLabel = new JLabel("Please Enter a Zip Code ... ");
 		zipCodeLabel.setOpaque(false);
 		zipCodeEnter = new JTextField(10);
+		JButton search = new JButton("Search");
 
-		Box un = Box.createHorizontalBox();
+		un = Box.createHorizontalBox();
 		un.setOpaque(false);
 		un.add(zipCodeLabel);
 		un.add(zipCodeEnter);
+		un.add(search);
 		
-		Client cd = new Client();
-		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
-		list = cd.getRestaurantlist("90007");
-		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
+		
+		gridHolder = new JPanel();
+		grid = new GridBagLayout();
+		gbc = new GridBagConstraints();
+		jsp = new JScrollPane(gridHolder);
+		gridHolder.setLayout(grid);
+		setLayout(new BorderLayout());
+		add(un, BorderLayout.NORTH);
+		add(jsp, BorderLayout.CENTER);
+		
+		search.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("STARTING TO SEARCH");
+				Client cd = new Client();
+				ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+				System.out.println("zip code received: " + zipCodeEnter.getText());
+				list = cd.getRestaurantlist(zipCodeEnter.getText());
+				System.out.println("Restaurants Received, Total Restaurants:" + list.size());
 
-		//int rows = list.size() / 4;
-		//System.out.println("rows: " + rows);
+				//setUpDisplay();
+				displayRestaurants(list, gridHolder);
+				validate();
+				repaint();
+				System.out.println("DONE WITH DISPLAYING");
+			}
+		});
+		
+	}
+	
+	public void setUpDisplay(){
 		gridHolder = new JPanel();
 		grid = new GridBagLayout();
 		gbc = new GridBagConstraints();
@@ -76,36 +107,17 @@ public class FoodXFrame extends JFrame {
 		
 		gridHolder.setLayout(grid);
 		setLayout(new BorderLayout());
-		add(un, BorderLayout.NORTH);
-		//add(gridHolder, BorderLayout.CENTER);
-		add(jsp, BorderLayout.CENTER);
 		
-
-		displayRestaurants(list, gridHolder);
+		add(jsp, BorderLayout.CENTER);
 	}
 
 	public void displayRestaurants(ArrayList<Restaurant> list, JPanel gridDisplay) {
-		
-//		Restaurant r = new Restaurant("Wokcano", "123 Horsed Ave.", "123-456-7890",
-//				"https://www.grubhub.com/restaurant/wokcano-800-w-7th-st-los-angeles/78645");
-//		Restaurant r1 = new Restaurant("Wokcano", "123 Horsed Ave.", "123-456-7890",
-//				"https://www.grubhub.com/restaurant/pizza-moon-2619-s-western-ave-los-angeles/260810");
-		// Restaurant r2 = new Restaurant("Wokcano", "123 Horsed Ave.",
-		// "123-456-7890",
-		// "https://www.grubhub.com/restaurant/wokcano-800-w-7th-st-los-angeles/78645");
-		// list.add(r);
-		// list.add(r1);
-		// list.add(r2);
 
 		URL url = null;
 		Image image = null;
 		ImageIcon ic = null;
 		Image image1 = null;
 		Image newImage = null;
-
-//		Client cd = new Client();
-//		list = cd.getRestaurantlist("90007");
-//		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
 		
 		int x = 0;
 		int y = 0;
@@ -127,24 +139,12 @@ public class FoodXFrame extends JFrame {
 			}
 
 			image1 = ic.getImage();
-			newImage = image1.getScaledInstance(300, 300, java.awt.Image.SCALE_SMOOTH);
+			newImage = image1.getScaledInstance(150, 150, java.awt.Image.SCALE_SMOOTH);
 			ic = new ImageIcon(newImage);
 
 			JLabel label = new JLabel("", ic, SwingConstants.CENTER);
 
-			label.addMouseListener(new MouseAdapter() {
-				public void mouseClicked(MouseEvent e) {
-					System.out.println("Click at: " + e.getPoint());
-					Desktop d = Desktop.getDesktop();
-					try {
-						d.browse(new URI(curr.getOrderURL()));
-					} catch (IOException e1) {
-						e1.printStackTrace();
-					} catch (URISyntaxException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
+			label.addMouseListener(new SendOrder(curr));
 			
 			JPanel restaurantBox = new JPanel();
 			restaurantBox.setLayout(new BorderLayout());
@@ -164,5 +164,28 @@ public class FoodXFrame extends JFrame {
 				y++;
 			}
 		}
+	}
+	
+	class SendOrder implements MouseListener{
+		private Restaurant curr;
+		public SendOrder(Restaurant curr1){
+			curr = curr1;
+		}
+		
+		public void mouseClicked(MouseEvent e) {
+			System.out.println("Click at: " + e.getPoint());
+			Desktop d = Desktop.getDesktop();
+			try {
+				d.browse(new URI(curr.getOrderURL()));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();
+			}
+		}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
 	}
 }
