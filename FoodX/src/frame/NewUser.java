@@ -212,7 +212,7 @@ public class NewUser extends JFrame {
 	
 	public static boolean register_user(String user, String password){
 		String Authenticated = "Authenticated";
-		String result = cl.authenticate(user, password);
+		String result = cl.authenticate_user(user, password);
 		if (result.equals(Authenticated)){
 			return true;
 		}
