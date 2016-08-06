@@ -81,6 +81,13 @@ public class FoodXFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				gridHolder.removeAll();
+				/*
+				JLabel loading = new JLabel("Loading...");
+				gbc.gridx = 0;
+				gbc.gridy = 0;
+				gbc.fill = GridBagConstraints.CENTER;
+				gridHolder.add(loading, gbc);
+				*/
 				System.out.println("STARTING TO SEARCH");
 				Client cd = new Client();
 				ArrayList<Restaurant> list = new ArrayList<Restaurant>();
@@ -96,18 +103,6 @@ public class FoodXFrame extends JFrame {
 			}
 		});
 		
-	}
-	
-	public void setUpDisplay(){
-		gridHolder = new JPanel();
-		grid = new GridBagLayout();
-		gbc = new GridBagConstraints();
-		jsp = new JScrollPane(gridHolder);
-		
-		gridHolder.setLayout(grid);
-		setLayout(new BorderLayout());
-		
-		add(jsp, BorderLayout.CENTER);
 	}
 
 	public void displayRestaurants(ArrayList<Restaurant> list, JPanel gridDisplay) {
