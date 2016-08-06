@@ -62,6 +62,7 @@ public class ClientThread extends Thread {
 			mLock.unlock();
 
 		}
+		System.out.println(reslist.size());
 		return reslist;
 
 	}

@@ -2,6 +2,8 @@ package frame;
 
 import java.awt.BorderLayout;
 import java.awt.Desktop;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
@@ -35,13 +37,14 @@ public class FoodXFrame extends JFrame {
 	}
 
 	private JTextField zipCodeEnter;
-	private GridLayout grid;
+	private GridBagLayout grid;
 	private JPanel gridHolder;
+	private GridBagConstraints gbc;
 
 	public FoodXFrame() {
 
 		// MAIN GUI
-		setTitle("Welcome to Food X");
+		setTitle("Welcome to FoodX");
 		setSize(640, 480);
 		setLocation(200, 200);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -59,12 +62,13 @@ public class FoodXFrame extends JFrame {
 		Client cd = new Client();
 		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
 		list = cd.getRestaurantlist("90007");
-		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
+		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
 
-		int rows = list.size() / 4;
+		//int rows = list.size() / 4;
 		//System.out.println("rows: " + rows);
 		gridHolder = new JPanel();
-		grid = new GridLayout(rows + 1, 4, 2, 2);
+		grid = new GridBagLayout();
+		gbc = new GridBagConstraints();
 		gridHolder.setLayout(grid);
 		setLayout(new BorderLayout());
 		add(un, BorderLayout.NORTH);
@@ -95,6 +99,10 @@ public class FoodXFrame extends JFrame {
 //		Client cd = new Client();
 //		list = cd.getRestaurantlist("90007");
 //		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
+		
+		int x = 0;
+		int y = 0;
+		
 		for (int i = 0; i < list.size(); i++) {
 			
 			Restaurant curr = list.get(i);
@@ -139,7 +147,14 @@ public class FoodXFrame extends JFrame {
 			System.out.println(curr.getName());
 			restaurantBox.add(name, BorderLayout.SOUTH);
 			restaurantBox.setVisible(true);
-			gridDisplay.add(restaurantBox);
+			gbc.gridx = x;
+			gbc.gridy = y;
+			gridDisplay.add(restaurantBox, gbc);
+			if(x != 3) x++;
+			else{
+				x = 0;
+				y++;
+			}
 		}
 	}
 }
