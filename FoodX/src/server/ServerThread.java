@@ -9,16 +9,18 @@ import java.util.ArrayList;
 
 import database.DataFetcher;
 import database.Message;
+import database.ServerDatabase;
 import restaurant.Restaurant;
 
 public class ServerThread extends Thread {
 	private ObjectInputStream serverInputStream;
 	private ObjectOutputStream serverOutputStream;
-
+	private ServerDatabase sd;
 	public ServerThread(Socket s, Server server) {
 		try {
 			serverOutputStream = new ObjectOutputStream(s.getOutputStream());
 			serverInputStream = new ObjectInputStream(s.getInputStream());
+			sd = new ServerDatabase();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,14 +53,26 @@ public class ServerThread extends Thread {
 
 		switch (id) {
 		// Restaurant
-		case 2:
+		case 1: processLogin(obj);
+			break;
+		case 2: 
 			fetchData(obj.getZipcode());
 			break;
+		case 3: processRegister(obj);
+			break;
+			
 		default:
 			System.out.println("Default");
-
 		}
+	}
 
+	private void processLogin(Message obj) {
+		sd.Authenticate_Login(obj.getUser(), obj.getPassword());
+		
+	}
+
+	private void processRegister(Message obj) {
+		sd.Register_User(obj.getUser(), obj.getPassword());
 	}
 
 	@Override
