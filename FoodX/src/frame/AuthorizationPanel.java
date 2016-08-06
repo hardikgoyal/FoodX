@@ -2,24 +2,17 @@ package frame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.LayoutManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import javax.management.JMX;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.SequentialGroup;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -37,8 +30,7 @@ public class AuthorizationPanel extends JFrame {
 	private static final long serialVersionUID = 9183816558021947333L;
 	static AuthorizationPanel AP;
 	private static NewUser nu;
-	static FoodXFrame xf;
-	
+		
 	private static MessageDigest md;
 	static Client cl;
 	
@@ -95,7 +87,7 @@ public class AuthorizationPanel extends JFrame {
 				boolean isUser = authenticate_user(usernameText, passwordText);
 				if (isTyped && isUser){
 					AP.setVisible(false);
-					xf.setVisible(true);
+
 				}
 				else{
 					usernameBox.setText("");
@@ -176,9 +168,6 @@ public class AuthorizationPanel extends JFrame {
 		
 		nu = new NewUser();
 		nu.setVisible(false);
-		
-		xf = new FoodXFrame();
-		xf.setVisible(false);
 	}
 	
 	private String encryption(String p){

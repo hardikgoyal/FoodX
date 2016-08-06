@@ -110,8 +110,7 @@ public class NewUser extends JFrame {
 						boolean canUse = register_user(usernameText, passwordText);
 						if (canUse){
 							AuthorizationPanel.AP.setVisible(false);
-							AuthorizationPanel.xf.setVisible(true);
-								
+//								
 						}else{
 							username1.setText("");
 							password1.setText("");
@@ -194,9 +193,9 @@ public class NewUser extends JFrame {
 	}
 	
 	public static boolean register_user(String user, String password){
-		String Authenticated = "Authenticated";
-		String result = cl.authenticate_user(user, password);
-		if (result.equals(Authenticated)){
+		String register = "Registered";
+		String result = cl.register_user(user, password);
+		if (result.equals(register)){
 			return true;
 		}
 		else{
