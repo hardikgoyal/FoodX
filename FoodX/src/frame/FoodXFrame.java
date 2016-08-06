@@ -6,6 +6,7 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
@@ -21,6 +22,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -40,6 +42,7 @@ public class FoodXFrame extends JFrame {
 	private GridBagLayout grid;
 	private JPanel gridHolder;
 	private GridBagConstraints gbc;
+	private JScrollPane jsp;
 
 	public FoodXFrame() {
 
@@ -69,10 +72,14 @@ public class FoodXFrame extends JFrame {
 		gridHolder = new JPanel();
 		grid = new GridBagLayout();
 		gbc = new GridBagConstraints();
+		jsp = new JScrollPane(gridHolder);
+		
 		gridHolder.setLayout(grid);
 		setLayout(new BorderLayout());
 		add(un, BorderLayout.NORTH);
-		add(gridHolder, BorderLayout.CENTER);
+		//add(gridHolder, BorderLayout.CENTER);
+		add(jsp, BorderLayout.CENTER);
+		
 
 		displayRestaurants(list, gridHolder);
 	}
@@ -149,6 +156,7 @@ public class FoodXFrame extends JFrame {
 			restaurantBox.setVisible(true);
 			gbc.gridx = x;
 			gbc.gridy = y;
+			gbc.insets = new Insets(3,3,3,3);
 			gridDisplay.add(restaurantBox, gbc);
 			if(x != 3) x++;
 			else{
