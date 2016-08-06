@@ -12,7 +12,7 @@ public class SQL_CONSTANTS {
 	public static final String INSERT = "INSERT INTO ";
 
 	public static final String PASSWORD = "root";
-	public static final String passWordField = "pass";
+	public static final String passWordField = "password";
 	public static final String SELECT = "Select * FROM ";
 	public static final String USER = "root";
 	public static final String userID = "userID";

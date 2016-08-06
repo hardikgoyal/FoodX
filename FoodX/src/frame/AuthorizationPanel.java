@@ -37,8 +37,7 @@ public class AuthorizationPanel extends JFrame {
 	private static final long serialVersionUID = 9183816558021947333L;
 	static AuthorizationPanel AP;
 	private static NewUser nu;
-	static FoodXFrame xf;
-	
+		
 	private static MessageDigest md;
 	static Client cl;
 	
@@ -96,7 +95,7 @@ public class AuthorizationPanel extends JFrame {
 				boolean isUser = authenticate_user(usernameText, passwordText);
 				if (isTyped && isUser){
 					AP.setVisible(false);
-					xf.setVisible(true);
+
 				}
 				else{
 					usernameBox.setText("");
@@ -177,9 +176,6 @@ public class AuthorizationPanel extends JFrame {
 		
 		nu = new NewUser();
 		nu.setVisible(false);
-		
-		xf = new FoodXFrame();
-		xf.setVisible(false);
 	}
 	
 	private String encryption(String p){

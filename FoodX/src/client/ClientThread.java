@@ -44,7 +44,7 @@ public class ClientThread extends Thread {
 			mLock.lock();
 			System.out.println("In Client Thread Restaurnat");
 			Message obj = new Message();
-			obj.setMessageID(2);
+			obj.setMessageID(3);
 			obj.setZipcode(zipcode);
 			try {
 				clientOutputStream.writeObject(obj);
@@ -71,17 +71,23 @@ public class ClientThread extends Thread {
 		try {
 			mLock.lock();
 			int id = obj.getMessageID();
-			System.out.println("Message Recieved");
+			System.out.println("Message Recieved: " + id);
 			switch (id) {
 
 			// Restaurant
-			case 1:
-				reslist = obj.getRestaurant();
+			case 1:message = obj.getMessage();
+				userLogin.signalAll();
+				break;
+				
+			case 2: message = obj.getMessage();
+				userRegistration.signalAll();
+				break;
+				
+			case 3: reslist = obj.getRestaurant();
 				ListRecieved.signalAll();
 				System.out.println("reslist initialised");
 				break;
-			case 2: 
-				break;
+				
 			default:
 				System.out.println("Default");
 			}
@@ -104,13 +110,13 @@ public class ClientThread extends Thread {
 			}
 			if (obj != null)
 				interpretMessage(obj);
-
 		}
 	}
 
 	public String register(String user, String password) {
 		String str = "";
 		mLock.lock();
+		System.out.println("In the registered User");
 		try{
 			Message obj = new Message ();
 			obj.setMessageID(2);
@@ -118,17 +124,21 @@ public class ClientThread extends Thread {
 			obj.setPassword(password);
 			try {
 				clientOutputStream.writeObject(obj);
-				System.out.println("Request Sent");
-				ListRecieved.await();
+				System.out.println("Register: Request Sent");
+				
+				userRegistration.await();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Request returned");
+			System.out.println("Register: Request returned");
 		} finally {
 			mLock.unlock();
 		}
+		str = message;
+		System.out.println("Register:"  + str);
+		message = "";
 		return str;
 	}
 
@@ -143,7 +153,7 @@ public class ClientThread extends Thread {
 			try {
 				clientOutputStream.writeObject(obj);
 				System.out.println("Request Sent");
-				ListRecieved.await();
+				userLogin.await();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (InterruptedException e) {
@@ -153,6 +163,8 @@ public class ClientThread extends Thread {
 		} finally {
 			mLock.unlock();
 		}
+		str = message;
+		message ="";
 		return str;
 	}
 

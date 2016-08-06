@@ -14,7 +14,7 @@ public class Message implements Serializable {
 	private int messageID;
 	private ArrayList<Restaurant> restaurant;
 	private String user, password, zipcode;
-
+	private String message;
 	public Message() {
 
 	}
@@ -71,6 +71,20 @@ public class Message implements Serializable {
 
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
+	}
+
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
 	}
 
 }
