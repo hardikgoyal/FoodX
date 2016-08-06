@@ -35,6 +35,8 @@ public class FoodXFrame extends JFrame {
 	}
 
 	private JTextField zipCodeEnter;
+	private GridLayout grid;
+	private JPanel gridHolder;
 
 	public FoodXFrame() {
 
@@ -53,18 +55,30 @@ public class FoodXFrame extends JFrame {
 		un.setOpaque(false);
 		un.add(zipCodeLabel);
 		un.add(zipCodeEnter);
-		setLayout(new GridLayout());
-		add(un);
+		
+		Client cd = new Client();
+		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+		list = cd.getRestaurantlist("90007");
+		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
 
-		displayRestaurants();
+		int rows = list.size() / 4;
+		//System.out.println("rows: " + rows);
+		gridHolder = new JPanel();
+		grid = new GridLayout(rows + 1, 4, 2, 2);
+		gridHolder.setLayout(grid);
+		setLayout(new BorderLayout());
+		add(un, BorderLayout.NORTH);
+		add(gridHolder, BorderLayout.CENTER);
+
+		displayRestaurants(list, gridHolder);
 	}
 
-	public void displayRestaurants() {
-		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
-		Restaurant r = new Restaurant("Wokcano", "123 Horsed Ave.", "123-456-7890",
-				"https://www.grubhub.com/restaurant/wokcano-800-w-7th-st-los-angeles/78645");
-		Restaurant r1 = new Restaurant("Wokcano", "123 Horsed Ave.", "123-456-7890",
-				"https://www.grubhub.com/restaurant/pizza-moon-2619-s-western-ave-los-angeles/260810");
+	public void displayRestaurants(ArrayList<Restaurant> list, JPanel gridDisplay) {
+		
+//		Restaurant r = new Restaurant("Wokcano", "123 Horsed Ave.", "123-456-7890",
+//				"https://www.grubhub.com/restaurant/wokcano-800-w-7th-st-los-angeles/78645");
+//		Restaurant r1 = new Restaurant("Wokcano", "123 Horsed Ave.", "123-456-7890",
+//				"https://www.grubhub.com/restaurant/pizza-moon-2619-s-western-ave-los-angeles/260810");
 		// Restaurant r2 = new Restaurant("Wokcano", "123 Horsed Ave.",
 		// "123-456-7890",
 		// "https://www.grubhub.com/restaurant/wokcano-800-w-7th-st-los-angeles/78645");
@@ -78,9 +92,9 @@ public class FoodXFrame extends JFrame {
 		Image image1 = null;
 		Image newImage = null;
 
-		Client cd = new Client();
-		list = cd.getRestaurantlist("90007");
-		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
+//		Client cd = new Client();
+//		list = cd.getRestaurantlist("90007");
+//		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
 		for (int i = 0; i < list.size(); i++) {
 			
 			Restaurant curr = list.get(i);
@@ -104,7 +118,6 @@ public class FoodXFrame extends JFrame {
 			JLabel label = new JLabel("", ic, SwingConstants.CENTER);
 
 			label.addMouseListener(new MouseAdapter() {
-				@Override
 				public void mouseClicked(MouseEvent e) {
 					System.out.println("Click at: " + e.getPoint());
 					Desktop d = Desktop.getDesktop();
@@ -117,11 +130,16 @@ public class FoodXFrame extends JFrame {
 					}
 				}
 			});
+			
 			JPanel restaurantBox = new JPanel();
+			restaurantBox.setLayout(new BorderLayout());
 			restaurantBox.add(label, BorderLayout.CENTER);
+			
+			JLabel name = new JLabel(curr.getName());
+			System.out.println(curr.getName());
+			restaurantBox.add(name, BorderLayout.SOUTH);
 			restaurantBox.setVisible(true);
-			this.add(restaurantBox);
+			gridDisplay.add(restaurantBox);
 		}
 	}
-
 }
