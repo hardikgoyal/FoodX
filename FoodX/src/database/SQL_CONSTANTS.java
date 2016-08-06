@@ -3,7 +3,7 @@ package database;
 
 public class SQL_CONSTANTS {
 
-	public static final String DATABASE_NAME = "hgoyal_office";
+	public static final String DATABASE_NAME = "Fp_Foodx";
 	public static final String FILE_TABLE = "userFile";
 	public static final String SHARED_NAME = "sharedFiles";
 	public static final String LOGIN_TABLE = "login";
@@ -12,7 +12,7 @@ public class SQL_CONSTANTS {
 	public static final String INSERT = "INSERT INTO ";
 
 	public static final String PASSWORD = "root";
-	public static final String passWordField = "password";
+	public static final String passWordField = "pass";
 	public static final String SELECT = "Select * FROM ";
 	public static final String USER = "root";
 	public static final String userID = "userID";
