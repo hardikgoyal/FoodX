@@ -64,6 +64,52 @@ public class ServerDatabase {
 			}
 		}
 	}
+	
+	public boolean addUser(String user, String path) {
+		PreparedStatement ps = null;
+		boolean nexists = false;
+		try{
+			ps = conn.prepareStatement(SQL_CONSTANTS.SELECT_FROM_USER);
+			ResultSet rs = ps.executeQuery();
+			
+			while (rs.next()){
+				String rsuser = rs.getString("userName");
+				if (rs.getString("userfile").compareTo(path) == 0){
+					if (rsuser.compareTo(user) == 0){
+						nexists = true;
+						JOptionPane.showMessageDialog(null,  "User Already Exists");
+					}
+				}
+					
+			}
+			int id = getUserId(user);
+			if (id == -1){
+				JOptionPane.showMessageDialog(null, "Invalid User");
+				nexists = false;
+			}
+			if (!nexists){
+				ps = conn.prepareStatement(SQL_CONSTANTS.INSERT + SQL_CONSTANTS.SHARED_NAME + "(" 
+						+ SQL_CONSTANTS.USER_FILE + "," + SQL_CONSTANTS.USER_SHARED_ID + ") VALUES (?,?)" );
+				System.out.println("User Path :" +path + " user: " +  user);
+				ps.setString(1, path);
+				ps.setInt(2, id);
+				ps.execute();
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally{
+			
+		}
+		if (ps!=null){
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return !nexists;
+	}
 
 	public String getFolderName(String userName) {
 		String un = "";
@@ -132,10 +178,11 @@ public class ServerDatabase {
 		return id + 1;
 	}
 
-	public boolean Register_User(String userName, String passWord) {
+	public String Register_User(String userName, String passWord) {
 		System.out.println("In the Registered Interfface");
 		boolean exists = false;
 		PreparedStatement ps = null;
+		String str = "User Already Exists";
 		try {
 
 			ps = conn.prepareStatement(
@@ -156,6 +203,7 @@ public class ServerDatabase {
 				ps.setString(1, userName);
 				ps.setString(2, passWord);
 				ps.executeUpdate();
+				str = "Registered Successfully";
 			}
 
 		} catch (SQLException e) {
@@ -167,56 +215,11 @@ public class ServerDatabase {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-		}
-		return !exists;
+		} 
+		return str;
 	}
 
-	public boolean addUser(String user, String path) {
-		PreparedStatement ps = null;
-		boolean nexists = false;
-		try{
-			ps = conn.prepareStatement(SQL_CONSTANTS.SELECT_FROM_USER);
-			ResultSet rs = ps.executeQuery();
-			
-			while (rs.next()){
-				String rsuser = rs.getString("userName");
-				if (rs.getString("userfile").compareTo(path) == 0){
-					if (rsuser.compareTo(user) == 0){
-						nexists = true;
-						JOptionPane.showMessageDialog(null,  "User Already Exists");
-					}
-				}
-					
-			}
-			int id = getUserId(user);
-			if (id == -1){
-				JOptionPane.showMessageDialog(null, "Invalid User");
-				nexists = false;
-			}
-			if (!nexists){
-				ps = conn.prepareStatement(SQL_CONSTANTS.INSERT + SQL_CONSTANTS.SHARED_NAME + "(" 
-						+ SQL_CONSTANTS.USER_FILE + "," + SQL_CONSTANTS.USER_SHARED_ID + ") VALUES (?,?)" );
-				System.out.println("User Path :" +path + " user: " +  user);
-				ps.setString(1, path);
-				ps.setInt(2, id);
-				ps.execute();
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			
-		}
-		if (ps!=null){
-			try {
-				ps.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-		return !nexists;
-	}
-
+	
 	private int getUserId(String user) {
 		PreparedStatement ps = null;
 		try {
