@@ -82,9 +82,7 @@ public class FoodXFrame extends JFrame {
 		list = cd.getRestaurantlist("90007");
 		System.out.println("Restaurants Recieved, Total Restaurants:" + list.size());
 		for (int i = 0; i < list.size(); i++) {
-			if (i == 0) {
-				break;
-			}
+			
 			Restaurant curr = list.get(i);
 
 			try {
