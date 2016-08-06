@@ -36,7 +36,7 @@ public class ServerThread extends Thread {
 		res = dt.fetch(zipcode);
 		System.out.println("Data Recieved");
 		Message obj = new Message();
-		obj.setMessageID(1);
+		obj.setMessageID(3);
 		obj.setRestaurant(res);
 		try {
 			serverOutputStream.writeObject(obj);
@@ -50,15 +50,15 @@ public class ServerThread extends Thread {
 	private void interpretMessage(Message obj) {
 		System.out.println("Interpretting Message in Server Thread");
 		int id = obj.getMessageID();
-
+		System.out.println(id);
 		switch (id) {
 		// Restaurant
 		case 1: processLogin(obj);
 			break;
-		case 2: 
-			fetchData(obj.getZipcode());
+		case 2: processRegister(obj);
 			break;
-		case 3: processRegister(obj);
+		case 3: 
+			fetchData(obj.getZipcode());
 			break;
 			
 		default:
@@ -67,12 +67,37 @@ public class ServerThread extends Thread {
 	}
 
 	private void processLogin(Message obj) {
-		sd.Authenticate_Login(obj.getUser(), obj.getPassword());
+		Message obj1 = new Message();
+		obj1.setMessageID(1);
+		if (sd.Authenticate_Login(obj.getUser(), obj.getPassword())){
+			obj1.setMessage("Authenticated");
+		}
+		else{
+			obj1.setMessage("Not Authenticated");
+		}
+		try {
+			serverOutputStream.writeObject(obj1);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		
 	}
 
 	private void processRegister(Message obj) {
-		sd.Register_User(obj.getUser(), obj.getPassword());
+		Message obj1 = new Message();
+		obj1.setMessageID(2);
+		if (sd.Register_User(obj.getUser(), obj.getPassword())){
+			obj1.setMessage("Registered");
+		}
+		else{
+			obj1.setMessage("Not Registered");
+		}
+		try {
+			serverOutputStream.writeObject(obj1);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
