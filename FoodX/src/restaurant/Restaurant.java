@@ -27,7 +27,7 @@ public class Restaurant implements Serializable {
 	}
 	
 	public String getImageURL() {
-		return imageURL;
+		return this.imageURL;
 	}
 
 	public String getName() {
@@ -37,6 +37,7 @@ public class Restaurant implements Serializable {
 	public String getOrderURL() {
 		return this.orderURL;
 	}
+
 
 	@Override
 	public String toString() {
