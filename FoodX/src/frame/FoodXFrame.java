@@ -4,12 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.Desktop;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
@@ -82,6 +80,7 @@ public class FoodXFrame extends JFrame {
 		search.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				gridHolder.removeAll();
 				System.out.println("STARTING TO SEARCH");
 				Client cd = new Client();
 				ArrayList<Restaurant> list = new ArrayList<Restaurant>();
@@ -127,10 +126,12 @@ public class FoodXFrame extends JFrame {
 			Restaurant curr = list.get(i);
 
 			try {
-				url = new URL("http://www.lasplash.com/uploads//3/wokcano_restaurants_logo.jpg");
+				System.out.println("image url: " + curr.getImageURL());
+				url = new URL(curr.getImageURL());
 			} catch (MalformedURLException e1) {
 				e1.printStackTrace();
-			}
+			} 
+			
 			try {
 				image = ImageIO.read(url);
 				ic = new ImageIcon(image);
