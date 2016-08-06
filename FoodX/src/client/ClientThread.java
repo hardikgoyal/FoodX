@@ -40,6 +40,7 @@ public class ClientThread extends Thread {
 	}
 
 	public ArrayList<Restaurant> getRestaurant(String zipcode) {
+		long time = System.currentTimeMillis();
 		try {
 			mLock.lock();
 			Message obj = new Message();
@@ -57,6 +58,8 @@ public class ClientThread extends Thread {
 		} finally {
 			mLock.unlock();
 		}
+		long finaltime = System.currentTimeMillis() - time;
+		System.out.println("Time: " + finaltime);
 		return reslist;
 
 	}
