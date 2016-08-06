@@ -108,7 +108,7 @@ public class DataFetcher {
 			for(int i=0 ; i < restaurantNames.size(); i++) {
 				restaurants.add(new Restaurant(restaurantNames.get(i),"","",urlToOrders.get(i)));
 				if(imageURLs != null) {
-					restaurants.get(i).setImage(imageURLs.get(i));
+					restaurants.get(i).setImage("http://" + imageURLs.get(i));
 				}
 			}
 
@@ -182,7 +182,7 @@ public class DataFetcher {
 			for(int i=0 ; i < restaurantNames.size(); i++) {
 				restaurants.add(new Restaurant(restaurantNames.get(i),addreses.get(i),phones.get(i),urlToOrders.get(i)));
 				if(images.get(i)!= null) {
-					restaurants.get(i).setImage(images.get(i));
+					restaurants.get(i).setImage("http://" + images.get(i));
 				}
 			}
 			
