@@ -24,15 +24,18 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 import client.Client;
+import server.Server;
 
 public class AuthorizationPanel extends JFrame {
 	
 	private static final long serialVersionUID = 9183816558021947333L;
 	static AuthorizationPanel AP;
-	private static NewUser nu;
+	static NewUser nu;
+	static FoodXFrame ff;
 		
 	private static MessageDigest md;
 	static Client cl;
+	static Server sv;
 	
 	public AuthorizationPanel() {
 		
@@ -42,7 +45,7 @@ public class AuthorizationPanel extends JFrame {
 		setLocation(200,200);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
-		cl = new Client();
+		
 		
 		//Interactive Options
 		JLabel username = new JLabel("User Name");
@@ -87,6 +90,7 @@ public class AuthorizationPanel extends JFrame {
 				boolean isUser = authenticate_user(usernameText, passwordText);
 				if (isTyped && isUser){
 					AP.setVisible(false);
+					ff.setVisible(true);
 
 				}
 				else{
@@ -107,6 +111,19 @@ public class AuthorizationPanel extends JFrame {
 			}
 		});
 		
+		JButton guestButton = new JButton("Guest");
+		guestButton.setBackground(Color.CYAN);
+		guestButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				//boolean isUser = authenticate_user("guest", "Guest1");
+				//if (isUser){
+					AP.setVisible(false);
+					ff.setVisible(true);
+				//}
+			}
+		});
+		
 		//Set Bottom Panel
 		Box login = Box.createVerticalBox();
 		//login.add(picture);
@@ -119,15 +136,15 @@ public class AuthorizationPanel extends JFrame {
 		gbc.gridx = 0;
 		gbc.gridy = 0;
 		jp.add(login, gbc);
-		//gbc.gridx = 0;
-		//gbc.gridy = -1;
-		//jp.add(picture);
 		gbc.gridx = 1;
 		gbc.gridy = 0;
 		jp.add(checkLogin, gbc);
 		gbc.gridx = 2;
 		gbc.gridy = 0;
 		jp.add(newUserButton, gbc);
+		gbc.gridx = 3;
+		gbc.gridy = 0;
+		jp.add(guestButton, gbc);
 		add(jp, BorderLayout.SOUTH);
 		
 		//set Back ground For GUI
@@ -165,9 +182,14 @@ public class AuthorizationPanel extends JFrame {
 	public static void main (String args []){
 		System.out.println("Food XXX");
 		AP = new AuthorizationPanel();
-		
 		nu = new NewUser();
 		nu.setVisible(false);
+		ff = new FoodXFrame();
+		ff.setVisible(false);
+		
+		//sv = new Server();
+		cl = new Client();
+		
 	}
 	
 	private String encryption(String p){

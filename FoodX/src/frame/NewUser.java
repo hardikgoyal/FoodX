@@ -31,6 +31,11 @@ public class NewUser extends JFrame {
 	private JTextField repeat1;
 	private static MessageDigest md;
 	static Client cl;
+	private String usernameText = null;
+	private String realpassword = null;
+	private String passwordText = null;
+	private String repeatText = null; 
+	
 
 	public NewUser(){
 		setTitle("New User");
@@ -46,13 +51,7 @@ public class NewUser extends JFrame {
 		
 		//Text and Image at Top of Frame
 		ImageIcon image = new ImageIcon("resources/img/never_stop_eating4.png");
-		//image.setOpaque(true);
 		JLabel label = new JLabel(image);
-		//label.add(gradientPanel);
-		//label.setOpaque(true);
-		//JPanel picture = new JPanel(new BorderLayout());
-		//MyJPanel picture = new MyJPanel();
-		//picture.add(label, BorderLayout.CENTER);
 		add(label, BorderLayout.NORTH);
 		
 		JLabel username = new JLabel("USERNAME ");
@@ -65,6 +64,7 @@ public class NewUser extends JFrame {
 		repeat1 = new JPasswordField(20);
 		
 		JButton loginButton = new JButton("CREATE NEW USER"); 
+		JButton returnToLogin = new JButton("Return to Login Menu");
 		
 		Box un = Box.createHorizontalBox();
 		un.add(username);
@@ -78,12 +78,16 @@ public class NewUser extends JFrame {
 		rp.add(repeat);
 		rp.add(repeat1);
 		
+		Box buttons = Box.createHorizontalBox();
+		buttons.add(loginButton);
+		buttons.add(returnToLogin);
+		
 		Box allboxes = Box.createVerticalBox();
-		//allboxes.setOpaque(false);
 		allboxes.add(un);
 		allboxes.add(pw);
 		allboxes.add(rp);
-		allboxes.add(loginButton);		
+		//allboxes.add(loginButton);
+		allboxes.add(buttons);
 		JPanel signupPanel = new JPanel();
 		signupPanel.setBackground(Color.GREEN);
 		signupPanel.add(allboxes, BorderLayout.CENTER);
@@ -118,6 +122,21 @@ public class NewUser extends JFrame {
 						}
 					}
 				}		
+			}
+		});
+		
+		returnToLogin.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				username1.setText("");
+				password1.setText("");
+				repeat1.setText("");
+				usernameText = "";
+				realpassword = "";
+				passwordText = "";
+				repeatText = "";
+				AuthorizationPanel.nu.setVisible(false);
+				AuthorizationPanel.AP.setVisible(true);	
 			}
 		});
 		
