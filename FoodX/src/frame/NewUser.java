@@ -34,8 +34,6 @@ public class NewUser extends JFrame {
 
 	public NewUser(){
 		setTitle("New User");
-//		UIManager.put("Panel.opaque", Boolean.valueOf(true));
-//		UIManager.put("Label.opaque", Boolean.valueOf(true));
 		
 		setSize(640,480);
 		setLocation(200,200);
@@ -47,16 +45,15 @@ public class NewUser extends JFrame {
 		//GradientPanel gradientPanel = new GradientPanel();
 		
 		//Text and Image at Top of Frame
-		ImageIcon image = new ImageIcon("resources/img/FoodX_Text_NewUser.png");
+		ImageIcon image = new ImageIcon("resources/img/never_stop_eating4.png");
+		//image.setOpaque(true);
 		JLabel label = new JLabel(image);
 		//label.add(gradientPanel);
 		//label.setOpaque(true);
 		//JPanel picture = new JPanel(new BorderLayout());
 		//MyJPanel picture = new MyJPanel();
-		
 		//picture.add(label, BorderLayout.CENTER);
 		add(label, BorderLayout.NORTH);
-		
 		
 		JLabel username = new JLabel("USERNAME ");
 		username1 = new JTextField(20);
@@ -80,7 +77,7 @@ public class NewUser extends JFrame {
 		Box rp = Box.createHorizontalBox();
 		rp.add(repeat);
 		rp.add(repeat1);
-
+		
 		Box allboxes = Box.createVerticalBox();
 		//allboxes.setOpaque(false);
 		allboxes.add(un);
@@ -91,7 +88,6 @@ public class NewUser extends JFrame {
 		signupPanel.setBackground(Color.GREEN);
 		signupPanel.add(allboxes, BorderLayout.CENTER);
 		add(signupPanel,BorderLayout.SOUTH);
-		
 		
 		//button to try and create a new user
 		loginButton.addActionListener(new ActionListener() {
@@ -120,7 +116,6 @@ public class NewUser extends JFrame {
 							password1.setText("");
 							repeat1.setText("");
 						}
-						//System.out.println("Password is good so far");
 					}
 				}		
 			}
@@ -141,21 +136,6 @@ public class NewUser extends JFrame {
             g2d.fillRect(0, 0, w, h);
         }
     }
-	
-	//function to look at server and see if their exists a username that matches it already
-	//private boolean checkServerUsername(String a){
-		/*//boolean canUsePassword = TrojanServer.checkMap(a);
-		if (canUsePassword){
-			JOptionPane.showMessageDialog(null,
-				    "This UserName already exists.  Please Choose another!",
-				    "Pick New UserName",
-				    JOptionPane.WARNING_MESSAGE);
-			username1.setText("");
-			return false;
-		}
-		else return true;*/
-	//}
-	
 	
 	//function will parse through string, ensuring the string has atleast one letter and one Uppercase letter;
 	private boolean checkCriteria(String a){

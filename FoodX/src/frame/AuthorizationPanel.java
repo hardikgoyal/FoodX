@@ -60,7 +60,6 @@ public class AuthorizationPanel extends JFrame {
 		picture.add(label, BorderLayout.CENTER);
 		add(picture, BorderLayout.NORTH);
 		
-		
 		JLabel label2 = new JLabel("Hello");
 		label2.setBackground(Color.BLUE);
 		
