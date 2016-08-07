@@ -93,6 +93,12 @@ public class ServerThread extends Thread {
 	@Override
 	public void run() {
 		while (true) {
+			try {
+				Thread.sleep(300);
+			} catch (InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			Message obj = null;
 			try {
 				obj = (Message) serverInputStream.readObject();

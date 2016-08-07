@@ -199,10 +199,10 @@ public class ServerDatabase {
 				// Enter Data
 				ps = conn.prepareStatement(SQL_CONSTANTS.INSERT + SQL_CONSTANTS.LOGIN_TABLE + "("
 						+ SQL_CONSTANTS.usernameField + "," + SQL_CONSTANTS.passWordField + ") VALUES (?,?)");
-
 				ps.setString(1, userName);
 				ps.setString(2, passWord);
 				ps.executeUpdate();
+				System.out.println("I'm here");
 				str = "Registered Successfully";
 			}
 
