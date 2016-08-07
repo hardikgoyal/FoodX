@@ -21,7 +21,6 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -91,25 +90,16 @@ public class FoodXFrame extends JFrame {
 		
 		search.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				
+			public void actionPerformed(ActionEvent e) {				
 				addLoading();
-				getRestaurants();
-				
+				getRestaurants();		
 			}
 		});
-		
 	}
 	
 	public void getRestaurants() {
 		gridHolder.removeAll();
-		/*
-		JLabel loading = new JLabel("Loading...");
-		gbc.gridx = 0;
-		gbc.gridy = 0;
-		gbc.fill = GridBagConstraints.CENTER;
-		gridHolder.add(loading, gbc);
-		*/
+
 		new SwingWorker<Void, Object>() {
             @Override
             protected Void doInBackground() throws Exception {
@@ -118,8 +108,6 @@ public class FoodXFrame extends JFrame {
         		System.out.println("zip code received: " + zipCodeEnter.getText());
         		list = cd.getRestaurantlist(zipCodeEnter.getText());
         		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
-
-        		//setUpDisplay();
         		displayRestaurants(list, gridHolder);
         		validate();
         		repaint();
