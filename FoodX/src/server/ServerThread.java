@@ -16,8 +16,10 @@ public class ServerThread extends Thread {
 	private ObjectInputStream serverInputStream;
 	private ObjectOutputStream serverOutputStream;
 	private ServerDatabase sd;
+	private Socket s;
 	public ServerThread(Socket s, Server server) {
 		try {
+			this.s = s;
 			serverOutputStream = new ObjectOutputStream(s.getOutputStream());
 			serverInputStream = new ObjectInputStream(s.getInputStream());
 			sd = new ServerDatabase();
@@ -64,12 +66,7 @@ public class ServerThread extends Thread {
 	private void processLogin(Message obj) {
 		Message obj1 = new Message();
 		obj1.setMessageID(1);
-		if (sd.Authenticate_Login(obj.getUser(), obj.getPassword())){
-			obj1.setMessage("Authenticated");
-		}
-		else{
-			obj1.setMessage("Not Authenticated");
-		}
+		obj1.setMessage(sd.Authenticate_Login(obj.getUser(), obj.getPassword()));
 		try {
 			serverOutputStream.writeObject(obj1);
 		} catch (IOException e) {
@@ -92,7 +89,7 @@ public class ServerThread extends Thread {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!s.isClosed()) {
 			try {
 				Thread.sleep(300);
 			} catch (InterruptedException e1) {
@@ -105,12 +102,19 @@ public class ServerThread extends Thread {
 				System.out.println("Something recieved");
 			} catch (EOFException e) {
 				System.out.println("infinite loop happens here");
+				try {
+					s.close();
+				} catch (IOException ioe) {
+					// TODO Auto-generated catch block
+					ioe.printStackTrace();
+				}
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
 			if (obj != null)
 				interpretMessage(obj);
 		}
+		
 	}
 
 }

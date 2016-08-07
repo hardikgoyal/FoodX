@@ -26,9 +26,9 @@ public class ServerDatabase {
 		}
 	}
 
-	public boolean Authenticate_Login(String userName, String passWord) {
+	public String Authenticate_Login(String userName, String passWord) {
 		PreparedStatement ps = null;
-		boolean authenticated = false;
+		String str = "Not Authenticated";
 		try {
 			ps = conn.prepareStatement(
 					"Select * FROM " + SQL_CONSTANTS.LOGIN_TABLE + " WHERE " + SQL_CONSTANTS.usernameField + "=?");
@@ -37,7 +37,9 @@ public class ServerDatabase {
 
 			if (rs.next()) {
 				String spassword = rs.getString(SQL_CONSTANTS.passWordField);
-				authenticated = (passWord.compareTo(spassword) == 0);
+				if (passWord.compareTo(spassword) == 0){
+					str = "Authenticated";
+				}
 			}
 
 			rs.close();
@@ -52,7 +54,7 @@ public class ServerDatabase {
 			}
 		}
 
-		return authenticated;
+		return str;
 	}
 
 	public void close() {
