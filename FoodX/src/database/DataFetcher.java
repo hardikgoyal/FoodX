@@ -32,12 +32,13 @@ public class DataFetcher {
 	public static void main(String [] args) {
 		DataFetcher df = new DataFetcher();
 		ArrayList<Restaurant> rests = df.fetch("90004");
-		/*
+		
 		for(Restaurant r : rests) {
 			System.out.println(r);
+			System.out.println(r.getImageURL());
 			System.out.println();
 		}
-		*/
+		
 	}
 	
 	public DataFetcher() {
@@ -106,10 +107,9 @@ public class DataFetcher {
 			
 			
 			for(int i=0 ; i < restaurantNames.size(); i++) {
-				restaurants.add(new Restaurant(restaurantNames.get(i),"","",urlToOrders.get(i)));
-				if(imageURLs != null) {
-					restaurants.get(i).setImage("http://" + imageURLs.get(i));
-				}
+				Restaurant rest = new Restaurant(restaurantNames.get(i),"","",urlToOrders.get(i));
+				rest.setImage("http://" + imageURLs.get(i));
+				restaurants.add(rest);
 			}
 
 		} catch (MalformedURLException e) {
@@ -180,10 +180,9 @@ public class DataFetcher {
 			in.close();
 			
 			for(int i=0 ; i < restaurantNames.size(); i++) {
-				restaurants.add(new Restaurant(restaurantNames.get(i),addreses.get(i),phones.get(i),urlToOrders.get(i)));
-				if(images.get(i)!= null) {
-					restaurants.get(i).setImage("http://" + images.get(i));
-				}
+				Restaurant rest = new Restaurant(restaurantNames.get(i),"","",urlToOrders.get(i));
+				rest.setImage("http://" + images.get(i + 1)); // skip first image, idk why
+				restaurants.add(rest);
 			}
 			
 		} catch (MalformedURLException e) {
