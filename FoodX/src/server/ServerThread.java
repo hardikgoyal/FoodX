@@ -98,6 +98,7 @@ public class ServerThread extends Thread {
 				obj = (Message) serverInputStream.readObject();
 				System.out.println("Something recieved");
 			} catch (EOFException e) {
+				System.out.println("infinite loop happens here");
 			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
