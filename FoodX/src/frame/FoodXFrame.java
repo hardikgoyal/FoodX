@@ -21,12 +21,14 @@ import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingWorker;
 
 import client.Client;
 import restaurant.Restaurant;
@@ -46,9 +48,12 @@ public class FoodXFrame extends JFrame {
 	private GridBagConstraints gbc;
 	private JScrollPane jsp;
 	private Box un;
+	private JPanel loading;
+	private Client cd;
 
 	public FoodXFrame() {
 
+		cd = new Client();
 		// MAIN GUI
 		setTitle("Welcome to FoodX");
 		setSize(860, 580);
@@ -77,32 +82,64 @@ public class FoodXFrame extends JFrame {
 		add(un, BorderLayout.NORTH);
 		add(jsp, BorderLayout.CENTER);
 		
+		//loading shit
+		loading = new JPanel();
+		loading.setLayout(new BorderLayout());
+		ImageIcon icon = new ImageIcon("resources/img/ajax-loader.gif");
+		icon.setImageObserver(loading);
+		loading.add(new JLabel(icon), BorderLayout.CENTER);
+		
 		search.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				gridHolder.removeAll();
-				/*
-				JLabel loading = new JLabel("Loading...");
-				gbc.gridx = 0;
-				gbc.gridy = 0;
-				gbc.fill = GridBagConstraints.CENTER;
-				gridHolder.add(loading, gbc);
-				*/
-				System.out.println("STARTING TO SEARCH");
-				Client cd = new Client();
-				ArrayList<Restaurant> list = new ArrayList<Restaurant>();
-				System.out.println("zip code received: " + zipCodeEnter.getText());
-				list = cd.getRestaurantlist(zipCodeEnter.getText());
-				System.out.println("Restaurants Received, Total Restaurants:" + list.size());
-
-				//setUpDisplay();
-				displayRestaurants(list, gridHolder);
-				validate();
-				repaint();
-				System.out.println("DONE WITH DISPLAYING");
+				
+				addLoading();
+				getRestaurants();
+				
 			}
 		});
 		
+	}
+	
+	public void getRestaurants() {
+		gridHolder.removeAll();
+		/*
+		JLabel loading = new JLabel("Loading...");
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		gbc.fill = GridBagConstraints.CENTER;
+		gridHolder.add(loading, gbc);
+		*/
+		new SwingWorker<Void, Object>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+            	System.out.println("STARTING TO SEARCH");
+        		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+        		System.out.println("zip code received: " + zipCodeEnter.getText());
+        		list = cd.getRestaurantlist(zipCodeEnter.getText());
+        		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
+
+        		//setUpDisplay();
+        		displayRestaurants(list, gridHolder);
+        		validate();
+        		repaint();
+        		System.out.println("DONE WITH DISPLAYING");
+				return null;
+            }
+
+            @Override
+            protected void done() {
+            	FoodXFrame.this.remove(loading);
+            	FoodXFrame.this.repaint();
+            }
+        }.execute();
+		
+	}
+	
+	public void addLoading() {
+		add(loading);
+		validate();
+		repaint();
 	}
 
 	public void displayRestaurants(ArrayList<Restaurant> list, JPanel gridDisplay) {
