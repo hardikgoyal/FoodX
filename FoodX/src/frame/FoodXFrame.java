@@ -76,6 +76,7 @@ public class FoodXFrame extends JFrame {
 		grid = new GridBagLayout();
 		gbc = new GridBagConstraints();
 		jsp = new JScrollPane(gridHolder);
+		jsp.getVerticalScrollBar().setUnitIncrement(16);
 		gridHolder.setLayout(grid);
 		setLayout(new BorderLayout());
 		add(un, BorderLayout.NORTH);
