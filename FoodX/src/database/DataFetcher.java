@@ -14,7 +14,7 @@ import restaurant.Restaurant;
 
 public class DataFetcher {
 	private static final String yelp_begin_url = "http://www.yelp.com/search?find_desc=Restaurants&find_loc=";
-	private static final String yelp_end_url = "&start=0&ytp_st=delivery"; // construct with yelp_begin_url + zip + yelp_end_url
+	private static final String yelp_end_url = "&start=0&attrs=PlatformDelivery&ytp_st=delivery"; // construct with yelp_begin_url + zip + yelp_end_url
 //	private static final String grub_hub_begin_url = "https://www.grubhub.com/search?orderMethod=delivery&locationMode=DELIVERY"; //add &latitude=XXXXX&longitude=XXXX
 	private static final String LA_bite_url = "https://www.labite.com/food-delivery-"; // add zip
 	private HashMap<String,LatLon> latlon;
@@ -78,7 +78,6 @@ public class DataFetcher {
 			System.out.println("after LA fetch");
 			
 			while ((inputLine = in.readLine()) != null)  {
-				
 				String restaurantName;
 				String urlToOrder;		
 				String imageURL;
@@ -136,14 +135,13 @@ public class DataFetcher {
 		
 		try {
 			yelp = new URL(request_url);
+			
 			URLConnection uc = yelp.openConnection();
 			BufferedReader in = new BufferedReader(
 	                new InputStreamReader(
 	                uc.getInputStream()));
 			String inputLine;
-			
 			while ((inputLine = in.readLine()) != null)  {
-				
 				String restaurantName;
 				String urlToOrder;
 				String address;
@@ -152,8 +150,8 @@ public class DataFetcher {
 				//System.out.println(inputLine);
 				
 				if(inputLine.contains("<span class=\"indexed-biz-name\">")) { 
+					
 					restaurantName = inputLine.substring(inputLine.indexOf("><span >") + "><span >".length(), inputLine.indexOf("</span></a>"));
-			
 					urlToOrder = "http://www.yelp.com/" + inputLine.substring(inputLine.indexOf("href=\"") + "href=\"".length(),inputLine.indexOf("\" data-hovercard-id"));
 					restaurantNames.add(restaurantName);
 					urlToOrders.add(urlToOrder);
