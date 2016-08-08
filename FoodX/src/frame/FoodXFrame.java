@@ -127,11 +127,8 @@ public class FoodXFrame extends JFrame {
 		try {
 			socket = new Socket("www.google.com", 80);
 			reachable = true;
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		} catch (IOException e) {	
-			e.printStackTrace();
 		}
+		catch (IOException e) {	}
 	    finally {            
 	    if (socket != null) try { socket.close(); } catch(IOException e) {}
 		}
