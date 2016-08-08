@@ -48,7 +48,7 @@ public class DataFetcher {
 	
 	public ArrayList<Restaurant> fetch(String zip) {
 		ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
-		if(zip == "") { return restaurants; }
+		if(zip.length() < 5) { return new ArrayList<Restaurant>(); }
 		System.out.println("before yelp");
 		restaurants.addAll(fetchYelp(zip));
 		System.out.println("after yelp");
