@@ -59,7 +59,7 @@ private static final String yelp_begin_url = "http://www.yelp.com/search?find_de
 	}
 	
 	private ArrayList<Restaurant> fetchLABite(String zip) {
-		
+		if(zip == null) { return new ArrayList<Restaurant>(); }
 		String request_url = LA_bite_url + zip;
 		URL LAbite;
 		

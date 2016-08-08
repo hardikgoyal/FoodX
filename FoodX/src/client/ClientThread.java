@@ -95,12 +95,14 @@ public class ClientThread extends Thread {
 		mLock.lock();
 		
 		try {
-			Message obj = new Message();
-			obj.setMessageID(5);
-			obj.setUser(user);
-			clientOutputStream.writeObject(obj);
-			System.out.println("Last Zip-Code Request Sent");
-			ziplock.await();
+			if (user != ""){
+				Message obj = new Message();
+				obj.setMessageID(5);
+				obj.setUser(user);
+				clientOutputStream.writeObject(obj);
+				System.out.println("Last Zip-Code Request Sent");
+				ziplock.await();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
