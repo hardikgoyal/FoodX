@@ -44,10 +44,10 @@ import restaurant.Restaurant;
 
 public class FoodXFrame extends JFrame {
 	private static final long serialVersionUID = 9183816558021947333L;
-	public static void main(String[] args) {
-		FoodXFrame fxf = new FoodXFrame(new Client());
-		fxf.setVisible(true);
-	}
+//	public static void main(String[] args) {
+//		FoodXFrame fxf = new FoodXFrame(new Client());
+//		fxf.setVisible(true);
+//	}
 
 	private JTextField zipCodeEnter;
 	private GridBagLayout grid;
@@ -58,9 +58,10 @@ public class FoodXFrame extends JFrame {
 	private JPanel loading;
 	private Client cd;
 
-	public FoodXFrame(Client cd) {
+	public FoodXFrame(Client cd, String userType) {
 
 		this.cd = cd;
+		
 		// MAIN GUI
 		setTitle("Welcome to FoodX");
 		setSize(860, 580);
@@ -72,6 +73,7 @@ public class FoodXFrame extends JFrame {
 		JLabel zipCodeLabel = new JLabel("Please Enter a Zip Code ... ");
 		zipCodeLabel.setOpaque(false);
 		zipCodeEnter = new JTextField(10);
+		//if(userType == "user") zipCodeEnter.setText(cd.getLastEntry());
 		JButton search = new JButton("Search");
 
 		un = Box.createHorizontalBox();
