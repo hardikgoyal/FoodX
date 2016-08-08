@@ -28,28 +28,28 @@ public class Client {
 	}
 
 
+	public void addLastEntry(String zipcode){
+		
+		ct.addLastEntry(zipcode);
+	}
+	
 	public String authenticate_user(String user, String password){
 		String res = ct.authenticate(user, password);
 		return res;
 	}
-	
-	public String register_user(String user, String password){
-		String res = ct.register(user, password);
-		return res;
+	public String getLastEntry(){
+		return ct.getLastEntry();
 	}
+	
 	public ArrayList<Restaurant> getRestaurantlist(String zipcode) {
 		System.out.println("Restaurant Request Recieved");
 		return ct.getRestaurant(zipcode);
 
 	}
 	
-	public void addLastEntry(String zipcode){
-		
-		ct.addLastEntry(zipcode);
-	}
-	
-	public String getLastEntry(){
-		return ct.getLastEntry();
+	public String register_user(String user, String password){
+		String res = ct.register(user, password);
+		return res;
 	}
 
 }

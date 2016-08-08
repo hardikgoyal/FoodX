@@ -27,14 +27,26 @@ import client.Client;
 
 public class AuthorizationPanel extends JFrame {
 
-	private static final long serialVersionUID = 9183816558021947333L;
-	private NewUser nu;
-
-
+	static class GradientPanel extends JPanel {
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			int w = getWidth(); 
+			int h = getHeight();
+			Graphics2D g2d = (Graphics2D) g;
+			g2d.setPaint(new GradientPaint(0, 0, Color.CYAN, 0, h, Color.WHITE));
+			g2d.fillRect(0, 0, w, h);
+		}
+	}
 	private static MessageDigest md;
+
+
+	private static final long serialVersionUID = 9183816558021947333L;
 	private Client cl;
 
 	private FoodXFrame mainframe;
+
+	private NewUser nu;
 
 	public AuthorizationPanel(Client client) {
 
@@ -155,6 +167,20 @@ public class AuthorizationPanel extends JFrame {
 		setVisible(true);
 	}
 
+
+	public boolean authenticate_user(String user, String password){
+		String Authenticated = "Authenticated";
+		String result = cl.authenticate_user(user, password);
+		if (result.equals(Authenticated)){
+			return true;
+		}
+		else{
+			JOptionPane.showMessageDialog(null,
+					result ,"Update",JOptionPane.WARNING_MESSAGE);
+			return false;
+		}
+	}
+
 	public boolean checkTyped(String u, String p){
 		if (u == null|| u.isEmpty() || p == null || p.isEmpty()){
 			UIManager.put("OptionPane.background", Color.green);
@@ -165,19 +191,6 @@ public class AuthorizationPanel extends JFrame {
 			return false;
 		}
 		return true;
-	}
-
-
-	static class GradientPanel extends JPanel {
-		@Override
-		protected void paintComponent(Graphics g) {
-			super.paintComponent(g);
-			int w = getWidth(); 
-			int h = getHeight();
-			Graphics2D g2d = (Graphics2D) g;
-			g2d.setPaint(new GradientPaint(0, 0, Color.CYAN, 0, h, Color.WHITE));
-			g2d.fillRect(0, 0, w, h);
-		}
 	}
 
 	private String encryption(String p){
@@ -195,19 +208,6 @@ public class AuthorizationPanel extends JFrame {
 			System.out.println("MD5 unavailable");
 		}
 		return null;
-	}
-
-	public boolean authenticate_user(String user, String password){
-		String Authenticated = "Authenticated";
-		String result = cl.authenticate_user(user, password);
-		if (result.equals(Authenticated)){
-			return true;
-		}
-		else{
-			JOptionPane.showMessageDialog(null,
-					result ,"Update",JOptionPane.WARNING_MESSAGE);
-			return false;
-		}
 	}
 
 	public String register_user(String user, String password){

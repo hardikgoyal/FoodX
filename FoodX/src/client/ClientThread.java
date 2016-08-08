@@ -5,8 +5,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -17,18 +15,18 @@ import frame.AuthorizationPanel;
 import restaurant.Restaurant;
 
 public class ClientThread extends Thread {
+	private AuthorizationPanel ap;
 	private ObjectInputStream clientInputStream;
 	private ObjectOutputStream clientOutputStream;
 	private Condition ListRecieved;
-	private Condition userLogin;
-	private Condition userRegistration;
+	private String message;
 	private Lock mLock;
 	private ArrayList<Restaurant> reslist;
-	private String message;
-	private AuthorizationPanel ap;
 	private String user;
-	private Condition ziplock;
+	private Condition userLogin;
+	private Condition userRegistration;
 	private String zip ="";
+	private Condition ziplock;
 	public ClientThread(Socket socket, Client client) {
 		mLock = new ReentrantLock();
 		message = "";
@@ -49,6 +47,71 @@ public class ClientThread extends Thread {
 		ap.setVisible(true);
 		start();
 		
+	}
+
+	public void addLastEntry(String zipcode) {
+		Message obj = new Message();
+		obj.setMessageID(4);
+		obj.setMessage(zipcode);
+		obj.setUser(user);
+		try {
+			clientOutputStream.writeObject(obj);
+			System.out.println("Add Zip-code Request Sent");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public String authenticate(String user, String password) {
+		String str = "";
+		mLock.lock();
+		try{
+			Message obj = new Message ();
+			obj.setMessageID(1);
+			obj.setUser(user);
+			obj.setPassword(password);
+			try {
+				clientOutputStream.writeObject(obj);
+				System.out.println("Request Sent");
+				userLogin.await();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Request returned");
+		} finally {
+			mLock.unlock();
+		}
+		str = message;
+		if (message.startsWith("Authenticated")){
+			this.user = user;
+		}
+		message ="";
+		return str;
+	}
+
+	public String getLastEntry(){
+		mLock.lock();
+		
+		try {
+			Message obj = new Message();
+			obj.setMessageID(5);
+			obj.setUser(user);
+			clientOutputStream.writeObject(obj);
+			System.out.println("Last Zip-Code Request Sent");
+			ziplock.await();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			mLock.unlock();
+		}
+		
+		
+		return zip;
 	}
 
 	public ArrayList<Restaurant> getRestaurant(String zipcode) {
@@ -110,22 +173,6 @@ public class ClientThread extends Thread {
 
 	}
 
-	@Override
-	public void run() {
-		while (true) {
-			Message obj = null;
-			try {
-				obj = (Message) clientInputStream.readObject();
-				System.out.println("Recieved Something: " + obj == null);
-			} catch (EOFException e) {
-			} catch (ClassNotFoundException | IOException e) {
-				e.printStackTrace();
-			}
-			if (obj != null)
-				interpretMessage(obj);
-		}
-	}
-
 	public String register(String user, String password) {
 		String str = "";
 		mLock.lock();
@@ -157,70 +204,21 @@ public class ClientThread extends Thread {
 		message = "";
 		return str;
 	}
-
-	public String authenticate(String user, String password) {
-		String str = "";
-		mLock.lock();
-		try{
-			Message obj = new Message ();
-			obj.setMessageID(1);
-			obj.setUser(user);
-			obj.setPassword(password);
+	
+	@Override
+	public void run() {
+		while (true) {
+			Message obj = null;
 			try {
-				clientOutputStream.writeObject(obj);
-				System.out.println("Request Sent");
-				userLogin.await();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (InterruptedException e) {
+				obj = (Message) clientInputStream.readObject();
+				System.out.println("Recieved Something: " + obj == null);
+			} catch (EOFException e) {
+			} catch (ClassNotFoundException | IOException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Request returned");
-		} finally {
-			mLock.unlock();
+			if (obj != null)
+				interpretMessage(obj);
 		}
-		str = message;
-		if (message.startsWith("Authenticated")){
-			this.user = user;
-		}
-		message ="";
-		return str;
-	}
-
-	public void addLastEntry(String zipcode) {
-		Message obj = new Message();
-		obj.setMessageID(4);
-		obj.setMessage(zipcode);
-		obj.setUser(user);
-		try {
-			clientOutputStream.writeObject(obj);
-			System.out.println("Add Zip-code Request Sent");
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
-	public String getLastEntry(){
-		mLock.lock();
-		
-		try {
-			Message obj = new Message();
-			obj.setMessageID(5);
-			obj.setUser(user);
-			clientOutputStream.writeObject(obj);
-			System.out.println("Last Zip-Code Request Sent");
-			ziplock.await();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally{
-			mLock.unlock();
-		}
-		
-		
-		return zip;
 	}
 
 }

@@ -13,13 +13,6 @@ import restaurant.Restaurant;
 
 
 public class DataFetcher {
-	private static final String yelp_begin_url = "http://www.yelp.com/search?find_desc=Restaurants&find_loc=";
-	private static final String yelp_end_url = "&start=0&attrs=PlatformDelivery&ytp_st=delivery"; // construct with yelp_begin_url + zip + yelp_end_url
-//	private static final String grub_hub_begin_url = "https://www.grubhub.com/search?orderMethod=delivery&locationMode=DELIVERY"; //add &latitude=XXXXX&longitude=XXXX
-	private static final String LA_bite_url = "https://www.labite.com/food-delivery-"; // add zip
-	private HashMap<String,LatLon> latlon;
-
-
 	private class LatLon {
 		public String lat;
 		public String lon;
@@ -28,7 +21,12 @@ public class DataFetcher {
 			this.lon = lon;
 		}
 	}
-	
+	//	private static final String grub_hub_begin_url = "https://www.grubhub.com/search?orderMethod=delivery&locationMode=DELIVERY"; //add &latitude=XXXXX&longitude=XXXX
+	private static final String LA_bite_url = "https://www.labite.com/food-delivery-"; // add zip
+private static final String yelp_begin_url = "http://www.yelp.com/search?find_desc=Restaurants&find_loc=";
+	private static final String yelp_end_url = "&start=0&attrs=PlatformDelivery&ytp_st=delivery"; // construct with yelp_begin_url + zip + yelp_end_url
+
+
 	public static void main(String [] args) {
 		DataFetcher df = new DataFetcher();
 		ArrayList<Restaurant> rests = df.fetch("90004");
@@ -40,6 +38,8 @@ public class DataFetcher {
 		}
 		
 	}
+	
+	private HashMap<String,LatLon> latlon;
 	
 	public DataFetcher() {
 
