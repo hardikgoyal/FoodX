@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
@@ -142,6 +144,30 @@ public class ClientThread extends Thread {
 		message = "";
 		return str;
 	}
+	
+	/*public void addZip(String zipcode){
+		java.sql.Connection conn = null;
+		try{
+			Class.forName("com.mysql.jdbc.Driver");
+			conn = DriverManager.getConnection("jdbc:mysql://localhost/FP_FOODX?user=root&password=root");
+			java.sql.PreparedStatement ps = conn.prepareStatement("DELETE FROM careymd.fileOwner WHERE owner='" + owner + "' AND filename='" + filename + "' AND userAccess='" + userAccess + "'");
+			ps.execute();
+			
+			
+		} catch (ClassNotFoundException cnfe){
+			System.out.println("CNFE: " + cnfe.getMessage());
+		} catch (SQLException sqle){
+			System.out.println("SQLE: " + sqle.getMessage());
+		} finally{
+			if(conn != null){
+				try{
+					conn.close();
+				} catch (SQLException sqle){
+					System.out.println("sqle: " + sqle.getMessage());
+				}
+			}
+		}
+	}*/
 
 	public String authenticate(String user, String password) {
 		String str = "";
