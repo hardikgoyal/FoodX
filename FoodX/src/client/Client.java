@@ -42,12 +42,13 @@ public class Client {
 		return ct.getRestaurant(zipcode);
 
 	}
-<<<<<<< HEAD
 	
 	public void addLastEntry(String zipcode){
 		ct.addLastEntry(zipcode);
 	}
-=======
+	
+	public String getLastEntry(){
+		return ct.getLastEntry();
+	}
 
->>>>>>> 40ebc06405efd9c92d58956c67eaf0b7d238aa7e
 }
