@@ -194,7 +194,7 @@ public class ClientThread extends Thread {
 		obj.setUser(user);
 		try {
 			clientOutputStream.writeObject(obj);
-			System.out.println("Request Sent");
+			System.out.println("Add Zip-code Request Sent");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -208,7 +208,7 @@ public class ClientThread extends Thread {
 			obj.setMessageID(101);
 			obj.setUser(user);
 			clientOutputStream.writeObject(obj);
-			System.out.println("Request Sent");
+			System.out.println("Last Zip-Code Request Sent");
 			ziplock.await();
 		} catch (IOException e) {
 			e.printStackTrace();
