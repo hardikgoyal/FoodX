@@ -1,9 +1,7 @@
 package frame;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
 import java.awt.Desktop;
-import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -14,23 +12,18 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -46,21 +39,57 @@ import restaurant.Restaurant;
 //import FoodX.NewUser.GradientPanel;
 
 public class FoodXFrame extends JFrame {
+	class LoadRestaurants implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addLoading();
+			getRestaurants();
+		}
+	}
+
+	class SendOrder implements MouseListener{
+		private Restaurant curr;
+		public SendOrder(Restaurant curr1){
+			curr = curr1;
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
+			System.out.println("Click at: " + e.getPoint());
+			Desktop d = Desktop.getDesktop();
+			try {
+				d.browse(new URI(curr.getOrderURL()));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();
+			}
+		}
+		@Override
+		public void mouseEntered(MouseEvent e) {}
+		@Override
+		public void mouseExited(MouseEvent e) {}
+		@Override
+		public void mousePressed(MouseEvent e) {}
+		@Override
+		public void mouseReleased(MouseEvent e) {}
+	}
 	private static final long serialVersionUID = 9183816558021947333L;
 //	public static void main(String[] args) {
 //		FoodXFrame fxf = new FoodXFrame(new Client());
 //		fxf.setVisible(true);
 //	}
-
-	private JTextField zipCodeEnter;
+	private Client cd;
+	private GridBagConstraints gbc;
 	private GridBagLayout grid;
 	private JPanel gridHolder;
-	private GridBagConstraints gbc;
 	private JScrollPane jsp;
-	private Box un;
 	private JPanel loading;
-	private Client cd;
 
+	private Box un;
+	
+	private JTextField zipCodeEnter;
+	
 	public FoodXFrame(Client cd, String userType) {
 
 		this.cd = cd;
@@ -119,14 +148,14 @@ public class FoodXFrame extends JFrame {
 		addWindowListener(new WindowAdapter(){
 
 			@Override
-			public void windowClosing(WindowEvent e) {
+			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
 				cd.addLastEntry(zipCodeEnter.getText());
 				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
 			}
 
 			@Override
-			public void windowClosed(WindowEvent e) {
+			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
 				cd.addLastEntry(zipCodeEnter.getText());
 				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
@@ -135,6 +164,7 @@ public class FoodXFrame extends JFrame {
 		});
 	}
 	
+<<<<<<< HEAD
 	class LoadRestaurants implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -204,12 +234,14 @@ public class FoodXFrame extends JFrame {
 		
 	}
 	
+=======
+>>>>>>> f38c146bcf7966c133c7679d682f4a2b72a93b01
 	public void addLoading() {
 		add(loading);
 		validate();
 		repaint();
 	}
-
+	
 	public void displayRestaurants(ArrayList<Restaurant> list, JPanel gridDisplay) {
 
 		URL url = null;
@@ -266,27 +298,60 @@ public class FoodXFrame extends JFrame {
 			}
 		}
 	}
-	
-	class SendOrder implements MouseListener{
-		private Restaurant curr;
-		public SendOrder(Restaurant curr1){
-			curr = curr1;
-		}
+
+	public void getRestaurants() {
+		gridHolder.removeAll();
+
+		new SwingWorker<Void, Object>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+            	System.out.println("STARTING TO SEARCH");
+        		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+        		System.out.println("zip code received: " + zipCodeEnter.getText());
+        		if(!networkConnection()) {
+        			JOptionPane.showMessageDialog(null,
+	        				"No network connection","No network connection",JOptionPane.ERROR_MESSAGE
+	        		);
+        			return null;
+        		}
+        		list = cd.getRestaurantlist(zipCodeEnter.getText());
+        		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
+        		
+        		if(list.isEmpty()) {
+	        		JOptionPane.showMessageDialog(null,
+	        				"No results found","No results found",JOptionPane.ERROR_MESSAGE
+	        		);
+        		}
+        		else {
+        			displayRestaurants(list, gridHolder);
+        		}
+        		
+        		validate();
+        		repaint();
+        		System.out.println("DONE WITH DISPLAYING");
+				return null;
+            }
+
+            @Override
+            protected void done() {
+            	FoodXFrame.this.remove(loading);
+            	FoodXFrame.this.repaint();
+            }
+        }.execute();
 		
-		public void mouseClicked(MouseEvent e) {
-			System.out.println("Click at: " + e.getPoint());
-			Desktop d = Desktop.getDesktop();
-			try {
-				d.browse(new URI(curr.getOrderURL()));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (URISyntaxException e1) {
-				e1.printStackTrace();
-			}
+	}
+	
+	private boolean networkConnection() {
+		Socket socket = null;
+		boolean reachable = false;
+		try {
+			socket = new Socket("www.google.com", 80);
+			reachable = true;
 		}
-		public void mousePressed(MouseEvent e) {}
-		public void mouseReleased(MouseEvent e) {}
-		public void mouseEntered(MouseEvent e) {}
-		public void mouseExited(MouseEvent e) {}
+		catch (IOException e) {	}
+	    finally {            
+	    if (socket != null) try { socket.close(); } catch(IOException e) {}
+		}
+		return reachable;
 	}
 }

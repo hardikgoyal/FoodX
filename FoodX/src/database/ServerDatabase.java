@@ -26,47 +26,20 @@ public class ServerDatabase {
 		}
 	}
 
-	public String Authenticate_Login(String userName, String passWord) {
-		PreparedStatement ps = null;
-		String str = "Not Authenticated";
+	public void addLastZip(String user, String message) {
 		try {
-			ps = conn.prepareStatement(
-					"Select * FROM " + SQL_CONSTANTS.LOGIN_TABLE + " WHERE " + SQL_CONSTANTS.usernameField + "=?");
-			ps.setString(1, userName);
-			ResultSet rs = ps.executeQuery();
-
-			if (rs.next()) {
-				String spassword = rs.getString(SQL_CONSTANTS.passWordField);
-				if (passWord.compareTo(spassword) == 0){
-					str = "Authenticated";
-				}
-			}
-
-			rs.close();
+			PreparedStatement ps = conn.prepareStatement(SQL_CONSTANTS.INSERT + "userdetails" + "("
+					+ "userID" + "," + "zip" + ") VALUES (?,?)");
+			ps.setInt(1, getUserId(user));
+			ps.setString(2, message);
+			ps.execute();
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		if (ps != null) {
-			try {
-				ps.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-
-		return str;
+		
 	}
 
-	public void close() {
-		if (conn != null) {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-	
 	public boolean addUser(String user, String path) {
 		PreparedStatement ps = null;
 		boolean nexists = false;
@@ -112,6 +85,47 @@ public class ServerDatabase {
 		}
 		return !nexists;
 	}
+	
+	public String Authenticate_Login(String userName, String passWord) {
+		PreparedStatement ps = null;
+		String str = "Not Authenticated";
+		try {
+			ps = conn.prepareStatement(
+					"Select * FROM " + SQL_CONSTANTS.LOGIN_TABLE + " WHERE " + SQL_CONSTANTS.usernameField + "=?");
+			ps.setString(1, userName);
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next()) {
+				String spassword = rs.getString(SQL_CONSTANTS.passWordField);
+				if (passWord.compareTo(spassword) == 0){
+					str = "Authenticated";
+				}
+			}
+
+			rs.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		if (ps != null) {
+			try {
+				ps.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return str;
+	}
+
+	public void close() {
+		if (conn != null) {
+			try {
+				conn.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+	}
 
 	public String getFolderName(String userName) {
 		String un = "";
@@ -149,6 +163,24 @@ public class ServerDatabase {
 		return un;
 	}
 
+	public String getLastZip(String user) {
+		String zip = "";
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL_CONSTANTS.SELECT + "userdetails Where userID =?");
+			ps.setInt(1, getUserId(user));
+			
+			ResultSet rs = ps.executeQuery();
+			if (rs.last())
+			zip = rs.getString("zip");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return zip;
+		
+	}
+
+	
 	public int getnewId() {
 		int id = 0;
 		PreparedStatement ps = null;
@@ -180,6 +212,36 @@ public class ServerDatabase {
 		return id + 1;
 	}
 
+	private int getUserId(String user) {
+		PreparedStatement ps = null;
+		try {
+			// Get User ID
+			String str ="SELECT * FROM " + SQL_CONSTANTS.LOGIN_TABLE;
+			System.out.println(str);
+			ps = conn.prepareStatement(str);
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()){
+				String username = rs.getString("userName");
+				if (username.compareTo(user) == 0){
+					return (rs.getInt("userID"));
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		finally{
+			if (ps!=null){
+				try {
+					ps.close();
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return -1;
+	}
+	
 	public String Register_User(String userName, String passWord) {
 		System.out.println("In the Registered Interfface");
 		boolean exists = false;
@@ -219,68 +281,6 @@ public class ServerDatabase {
 			}
 		} 
 		return str;
-	}
-
-	
-	private int getUserId(String user) {
-		PreparedStatement ps = null;
-		try {
-			// Get User ID
-			String str ="SELECT * FROM " + SQL_CONSTANTS.LOGIN_TABLE;
-			System.out.println(str);
-			ps = conn.prepareStatement(str);
-			ResultSet rs = ps.executeQuery();
-			while (rs.next()){
-				String username = rs.getString("userName");
-				if (username.compareTo(user) == 0){
-					return (rs.getInt("userID"));
-				}
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		finally{
-			if (ps!=null){
-				try {
-					ps.close();
-				} catch (SQLException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		return -1;
-	}
-
-	public void addLastZip(String user, String message) {
-		try {
-			PreparedStatement ps = conn.prepareStatement(SQL_CONSTANTS.INSERT + "userdetails" + "("
-					+ "userID" + "," + "zip" + ") VALUES (?,?)");
-			ps.setInt(1, getUserId(user));
-			ps.setString(2, message);
-			ps.execute();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-	}
-	
-	public String getLastZip(String user) {
-		String zip = "";
-		try {
-			PreparedStatement ps = conn.prepareStatement(SQL_CONSTANTS.SELECT + "userdetails Where userID =?");
-			ps.setInt(1, getUserId(user));
-			
-			ResultSet rs = ps.executeQuery();
-			rs.last();
-			zip = rs.getString("zip");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return zip;
-		
 	}
 
 }

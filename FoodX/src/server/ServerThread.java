@@ -13,10 +13,10 @@ import database.ServerDatabase;
 import restaurant.Restaurant;
 
 public class ServerThread extends Thread {
+	private Socket s;
+	private ServerDatabase sd;
 	private ObjectInputStream serverInputStream;
 	private ObjectOutputStream serverOutputStream;
-	private ServerDatabase sd;
-	private Socket s;
 	public ServerThread(Socket s, Server server) {
 		try {
 			this.s = s;
@@ -27,6 +27,11 @@ public class ServerThread extends Thread {
 			e.printStackTrace();
 		}
 		start();
+	}
+
+	private void addZip(String user, String message) {
+		sd.addLastZip(user, message);
+		
 	}
 
 	private void fetchData(String zipcode) {
@@ -43,6 +48,18 @@ public class ServerThread extends Thread {
 		}
 	}
 
+	private void getZip(String user) {
+		String str = sd.getLastZip(user);
+		Message obj = new Message ();
+		obj.setMessageID(4);
+		obj.setMessage(str);
+		try {
+			serverOutputStream.writeObject(obj);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	private void interpretMessage(Message obj) {
 		System.out.println("Interpretting Message in Server Thread");
 		int id = obj.getMessageID();
@@ -56,30 +73,13 @@ public class ServerThread extends Thread {
 		case 3: 
 			fetchData(obj.getZipcode());
 			break;
-		case 100:
+		case 4:
 			addZip(obj.getUser(),obj.getMessage());
 			break;
-		case 101:
+		case 5:
 			getZip(obj.getUser());
 		default:
 			System.out.println("Default");
-		}
-	}
-
-	private void addZip(String user, String message) {
-		sd.addLastZip(user, message);
-		
-	}
-	
-	private void getZip(String user) {
-		String str = sd.getLastZip(user);
-		Message obj = new Message ();
-		obj.setMessageID(101);
-		obj.setMessage(str);
-		try {
-			serverOutputStream.writeObject(obj);
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 

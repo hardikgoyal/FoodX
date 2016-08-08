@@ -11,12 +11,19 @@ public class Message implements Serializable {
 	 */
 	private static final long serialVersionUID = 2334490287694436749L;
 	private boolean authenticated, registered;
+	private String message;
 	private int messageID;
 	private ArrayList<Restaurant> restaurant;
 	private String user, password, zipcode;
-	private String message;
 	public Message() {
 
+	}
+
+	/**
+	 * @return the message
+	 */
+	public String getMessage() {
+		return message;
 	}
 
 	public int getMessageID() {
@@ -53,6 +60,13 @@ public class Message implements Serializable {
 		return registered;
 	}
 
+	/**
+	 * @param message the message to set
+	 */
+	public void setMessage(String message) {
+		this.message = message;
+	}
+
 	public void setMessageID(int messageID) {
 		this.messageID = messageID;
 	}
@@ -71,20 +85,6 @@ public class Message implements Serializable {
 
 	public void setZipcode(String zipcode) {
 		this.zipcode = zipcode;
-	}
-
-	/**
-	 * @return the message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
-	/**
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 }

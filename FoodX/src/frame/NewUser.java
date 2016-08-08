@@ -2,7 +2,6 @@ package frame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -20,23 +19,34 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.UIManager;
 
 import client.Client;
 
 public class NewUser extends JFrame {
-	private static final long serialVersionUID = 9183816558021947333L;
-	private JTextField username1;
-	private JTextField password1;
-	private JTextField repeat1;
+	static class GradientPanel extends JPanel {
+        @Override
+        protected void paintComponent(Graphics g) {
+            super.paintComponent(g);
+            int w = getWidth(); 
+            int h = getHeight();
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setPaint(new GradientPaint(0, 0, Color.YELLOW, 0, h, Color.GREEN));
+            g2d.fillRect(0, 0, w, h);
+        }
+    }
 	private static MessageDigest md;
-	private Client cl;
-	private String usernameText = null;
-	private String realpassword = null;
-	private String passwordText = null;
-	private String repeatText = null; 
+	private static final long serialVersionUID = 9183816558021947333L;
 	private AuthorizationPanel AP;
+	private Client cl;
+	private JTextField password1;
+	private String passwordText = null;
+	private String realpassword = null;
+	private JTextField repeat1;
+	private String repeatText = null; 
+	private JTextField username1;
 
+	private String usernameText = null;
+	
 	public NewUser(AuthorizationPanel ap, Client cl){
 		setTitle("New User");
 		AP = ap;
@@ -144,18 +154,6 @@ public class NewUser extends JFrame {
 		add(gradientPanel);	
 	}
 	
-	static class GradientPanel extends JPanel {
-        @Override
-        protected void paintComponent(Graphics g) {
-            super.paintComponent(g);
-            int w = getWidth(); 
-            int h = getHeight();
-            Graphics2D g2d = (Graphics2D) g;
-            g2d.setPaint(new GradientPaint(0, 0, Color.YELLOW, 0, h, Color.GREEN));
-            g2d.fillRect(0, 0, w, h);
-        }
-    }
-	
 	//function will parse through string, ensuring the string has atleast one letter and one Uppercase letter;
 	private boolean checkCriteria(String a){
 		int number = 0;
@@ -211,19 +209,6 @@ public class NewUser extends JFrame {
 		repeat1.setText("");
 	}
 	
-	public boolean register_user(String user, String password){
-		String register = "Registered";
-		String result = cl.register_user(user, password);
-		if (result.equals(register)){
-			return true;
-		}
-		else{
-		JOptionPane.showMessageDialog(null,
-			  result ,"Update",JOptionPane.WARNING_MESSAGE);
-		return false;
-		}
-	}
-	
 	private String encryption(String p){
 		try {
 			md = MessageDigest.getInstance("MD5");
@@ -239,5 +224,18 @@ public class NewUser extends JFrame {
 			System.out.println("MD5 unavailable");
 		}
 		return null;
+	}
+	
+	public boolean register_user(String user, String password){
+		String register = "Registered";
+		String result = cl.register_user(user, password);
+		if (result.equals(register)){
+			return true;
+		}
+		else{
+		JOptionPane.showMessageDialog(null,
+			  result ,"Update",JOptionPane.WARNING_MESSAGE);
+		return false;
+		}
 	}	
 }
