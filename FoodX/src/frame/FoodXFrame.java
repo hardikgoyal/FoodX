@@ -27,6 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -126,7 +127,16 @@ public class FoodXFrame extends JFrame {
         		System.out.println("zip code received: " + zipCodeEnter.getText());
         		list = cd.getRestaurantlist(zipCodeEnter.getText());
         		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
-        		displayRestaurants(list, gridHolder);
+        		
+        		if(list.isEmpty()) {
+	        		JOptionPane.showMessageDialog(null,
+	        				"No results found, check zip code and network connection","No results found",JOptionPane.ERROR_MESSAGE
+	        		);
+        		}
+        		else {
+        			displayRestaurants(list, gridHolder);
+        		}
+        		
         		validate();
         		repaint();
         		System.out.println("DONE WITH DISPLAYING");

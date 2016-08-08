@@ -50,7 +50,7 @@ public class AuthorizationPanel extends JFrame {
 		//Interactive Options
 		JLabel username = new JLabel("User Name");
 		JLabel password = new JLabel("Password  ");
-		JTextField usernameBox = new JTextField("BrianTheHunk", 20);
+		JTextField usernameBox = new JTextField("", 20);
 		usernameBox.setForeground(Color.BLUE);
 
 		JTextField passwordBox = new JPasswordField(20);
