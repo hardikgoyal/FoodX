@@ -1,26 +1,26 @@
 ### Who do I talk to? ###
   
  
-  * Brian Jaques - bjaques@usc.edu 
+* Brian Jaques - bjaques@usc.edu 
  
- * Alina Sun - alinasun@usc.edu 
+* Alina Sun - alinasun@usc.edu 
  
-  * Trevor Bernard - tsbernar@usc.edu 
+* Trevor Bernard - tsbernar@usc.edu 
  
-  * Hardik Goyal - hgoyal@usc.edu 
+* Hardik Goyal - hgoyal@usc.edu 
  
  
- ### How do I get set up? ###
+### How do I get set up? ###
  
- * Summary of set up
- * Configuration
- * Dependencies
- * Database configuration
- * How to run tests
- * Deployment instructions
+* Summary of set up
+* Configuration
+* Dependencies
+* Database configuration
+* How to run tests
+* Deployment instructions
  
- ### Contribution guidelines ###
+### Contribution guidelines ###
 
- * Writing tests
- * Code review
- * Other guidelines
+* Writing tests
+* Code review
+* Other guidelines
