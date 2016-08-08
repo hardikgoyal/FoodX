@@ -41,7 +41,6 @@ public class ServerThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private void interpretMessage(Message obj) {
@@ -57,9 +56,30 @@ public class ServerThread extends Thread {
 		case 3: 
 			fetchData(obj.getZipcode());
 			break;
-			
+		case 100:
+			addZip(obj.getUser(),obj.getMessage());
+			break;
+		case 101:
+			getZip(obj.getUser());
 		default:
 			System.out.println("Default");
+		}
+	}
+
+	private void addZip(String user, String message) {
+		sd.addLastZip(user, message);
+		
+	}
+	
+	private void getZip(String user) {
+		String str = sd.getLastZip(user);
+		Message obj = new Message ();
+		obj.setMessageID(101);
+		obj.setMessage(str);
+		try {
+			serverOutputStream.writeObject(obj);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

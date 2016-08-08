@@ -24,9 +24,14 @@ public class ClientThread extends Thread {
 	private ArrayList<Restaurant> reslist;
 	private String message;
 	private AuthorizationPanel ap;
+	private String user;
+	private Condition ziplock;
+	private String zip ="";
 	public ClientThread(Socket socket, Client client) {
 		mLock = new ReentrantLock();
 		message = "";
+		user = "";
+		ziplock = mLock.newCondition();
 		ListRecieved = mLock.newCondition();
 		userLogin = mLock.newCondition();
 		userRegistration = mLock.newCondition();
@@ -39,6 +44,7 @@ public class ClientThread extends Thread {
 			e.printStackTrace();
 		}
 		ap = new AuthorizationPanel(client);
+		ap.setVisible(true);
 		start();
 		
 	}
@@ -87,6 +93,10 @@ public class ClientThread extends Thread {
 			case 3: reslist = obj.getRestaurant();
 				ListRecieved.signalAll();
 				System.out.println("reslist initialised");
+				break;
+			case 101: 
+				zip = obj.getMessage();
+				ziplock.signalAll();
 				break;
 				
 			default:
@@ -138,6 +148,9 @@ public class ClientThread extends Thread {
 			mLock.unlock();
 		}
 		str = message;
+		if (message.startsWith("Registered")){
+			this.user = user;
+		}
 		System.out.println("Register:"  + str);
 		message = "";
 		return str;
@@ -165,8 +178,47 @@ public class ClientThread extends Thread {
 			mLock.unlock();
 		}
 		str = message;
+		if (message.startsWith("Authenticated")){
+			this.user = user;
+		}
 		message ="";
 		return str;
+	}
+
+	public void addLastEntry(String zipcode) {
+		Message obj = new Message();
+		obj.setMessageID(100);
+		obj.setMessage(zipcode);
+		obj.setUser(user);
+		try {
+			clientOutputStream.writeObject(obj);
+			System.out.println("Request Sent");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public String getLastEntry(){
+		mLock.lock();
+		
+		try {
+			Message obj = new Message();
+			obj.setMessageID(101);
+			obj.setUser(user);
+			clientOutputStream.writeObject(obj);
+			System.out.println("Request Sent");
+			ziplock.await();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			mLock.unlock();
+		}
+		
+		
+		return zip;
 	}
 
 }
