@@ -24,7 +24,7 @@ public class DataFetcher {
 	}
 	//	private static final String grub_hub_begin_url = "https://www.grubhub.com/search?orderMethod=delivery&locationMode=DELIVERY"; //add &latitude=XXXXX&longitude=XXXX
 	private static final String LA_bite_url = "https://www.labite.com/food-delivery-"; // add zip
-private static final String yelp_begin_url = "http://www.yelp.com/search?find_desc=Restaurants&find_loc=";
+	private static final String yelp_begin_url = "http://www.yelp.com/search?find_desc=Restaurants&find_loc=";
 	private static final String yelp_end_url = "&start=0&attrs=PlatformDelivery&ytp_st=delivery"; // construct with yelp_begin_url + zip + yelp_end_url
 
 
@@ -48,6 +48,7 @@ private static final String yelp_begin_url = "http://www.yelp.com/search?find_de
 	
 	public ArrayList<Restaurant> fetch(String zip) {
 		ArrayList<Restaurant> restaurants = new ArrayList<Restaurant>();
+		if(zip == "") { return restaurants; }
 		System.out.println("before yelp");
 		restaurants.addAll(fetchYelp(zip));
 		System.out.println("after yelp");
