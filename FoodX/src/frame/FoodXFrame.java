@@ -151,17 +151,91 @@ public class FoodXFrame extends JFrame {
 			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
 				cd.addLastEntry(zipCodeEnter.getText());
+				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
 			}
 
 			@Override
 			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
 				cd.addLastEntry(zipCodeEnter.getText());
+				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
 			}
 			
 		});
 	}
 	
+<<<<<<< HEAD
+	class LoadRestaurants implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addLoading();
+			getRestaurants();
+			cd.addLastEntry(zipCodeEnter.getText());
+			System.out.println("added last entry (frame): " + zipCodeEnter.getText());
+		}
+	}
+	
+	private boolean networkConnection() {
+		Socket socket = null;
+		boolean reachable = false;
+		try {
+			socket = new Socket("www.google.com", 80);
+			reachable = true;
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		} catch (IOException e) {	
+			e.printStackTrace();
+		}
+	    finally {            
+	    if (socket != null) try { socket.close(); } catch(IOException e) {}
+		}
+		return reachable;
+	}
+	
+	public void getRestaurants() {
+		gridHolder.removeAll();
+
+		new SwingWorker<Void, Object>() {
+            @Override
+            protected Void doInBackground() throws Exception {
+            	System.out.println("STARTING TO SEARCH");
+        		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
+        		System.out.println("zip code received: " + zipCodeEnter.getText());
+        		if(!networkConnection()) {
+        			JOptionPane.showMessageDialog(null,
+	        				"No network connection","No network connection",JOptionPane.ERROR_MESSAGE
+	        		);
+        			return null;
+        		}
+        		list = cd.getRestaurantlist(zipCodeEnter.getText());
+        		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
+        		
+        		if(list.isEmpty()) {
+	        		JOptionPane.showMessageDialog(null,
+	        				"No results found","No results found",JOptionPane.ERROR_MESSAGE
+	        		);
+        		}
+        		else {
+        			displayRestaurants(list, gridHolder);
+        		}
+        		
+        		validate();
+        		repaint();
+        		System.out.println("DONE WITH DISPLAYING");
+				return null;
+            }
+
+            @Override
+            protected void done() {
+            	FoodXFrame.this.remove(loading);
+            	FoodXFrame.this.repaint();
+            }
+        }.execute();
+		
+	}
+	
+=======
+>>>>>>> f38c146bcf7966c133c7679d682f4a2b72a93b01
 	public void addLoading() {
 		add(loading);
 		validate();
