@@ -31,9 +31,12 @@ public class ServerDatabase {
 			PreparedStatement ps = conn.prepareStatement(SQL_CONSTANTS.INSERT + "userdetails" + "("
 					+ "userID" + "," + "zip" + ") VALUES (?,?)");
 			ps.setInt(1, getUserId(user));
-			ps.setString(2, message);
+			int zip = Integer.parseInt(message);
+			ps.setInt(2, zip);
 			ps.execute();
-		} catch (SQLException e) {
+		} catch (NumberFormatException e){
+			// Do nothing
+		}catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
