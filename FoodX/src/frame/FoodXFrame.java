@@ -1,7 +1,9 @@
 package frame;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -12,18 +14,23 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -39,57 +46,21 @@ import restaurant.Restaurant;
 //import FoodX.NewUser.GradientPanel;
 
 public class FoodXFrame extends JFrame {
-	class LoadRestaurants implements ActionListener{
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			addLoading();
-			getRestaurants();
-		}
-	}
-
-	class SendOrder implements MouseListener{
-		private Restaurant curr;
-		public SendOrder(Restaurant curr1){
-			curr = curr1;
-		}
-		
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			System.out.println("Click at: " + e.getPoint());
-			Desktop d = Desktop.getDesktop();
-			try {
-				d.browse(new URI(curr.getOrderURL()));
-			} catch (IOException e1) {
-				e1.printStackTrace();
-			} catch (URISyntaxException e1) {
-				e1.printStackTrace();
-			}
-		}
-		@Override
-		public void mouseEntered(MouseEvent e) {}
-		@Override
-		public void mouseExited(MouseEvent e) {}
-		@Override
-		public void mousePressed(MouseEvent e) {}
-		@Override
-		public void mouseReleased(MouseEvent e) {}
-	}
 	private static final long serialVersionUID = 9183816558021947333L;
 //	public static void main(String[] args) {
 //		FoodXFrame fxf = new FoodXFrame(new Client());
 //		fxf.setVisible(true);
 //	}
-	private Client cd;
-	private GridBagConstraints gbc;
+
+	private JTextField zipCodeEnter;
 	private GridBagLayout grid;
 	private JPanel gridHolder;
+	private GridBagConstraints gbc;
 	private JScrollPane jsp;
-	private JPanel loading;
-
 	private Box un;
-	
-	private JTextField zipCodeEnter;
-	
+	private JPanel loading;
+	private Client cd;
+
 	public FoodXFrame(Client cd, String userType) {
 
 		this.cd = cd;
@@ -106,7 +77,6 @@ public class FoodXFrame extends JFrame {
 		zipCodeLabel.setOpaque(false);
 		zipCodeEnter = new JTextField(10);
 		if(userType == "user") zipCodeEnter.setText(cd.getLastEntry());
-		//if(userType == "user") zipCodeEnter.setText("12345");
 		JButton search = new JButton("Search");
 
 		un = Box.createHorizontalBox();
@@ -133,45 +103,17 @@ public class FoodXFrame extends JFrame {
 		icon.setImageObserver(loading);
 		loading.add(new JLabel(icon), BorderLayout.CENTER);
 		
-		/*
-		search.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {				
-				addLoading();
-				getRestaurants();		
-			}
-		});
-		*/
 		search.addActionListener(new LoadRestaurants());
 		zipCodeEnter.addActionListener(new LoadRestaurants());
 		
-		addWindowListener(new WindowAdapter(){
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-				// TODO Auto-generated method stub
-				cd.addLastEntry(zipCodeEnter.getText());
-				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				// TODO Auto-generated method stub
-				cd.addLastEntry(zipCodeEnter.getText());
-				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
-			}
-			
-		});
 	}
 	
-<<<<<<< HEAD
 	class LoadRestaurants implements ActionListener{
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			addLoading();
 			getRestaurants();
 			cd.addLastEntry(zipCodeEnter.getText());
-			System.out.println("added last entry (frame): " + zipCodeEnter.getText());
 		}
 	}
 	
@@ -234,14 +176,12 @@ public class FoodXFrame extends JFrame {
 		
 	}
 	
-=======
->>>>>>> f38c146bcf7966c133c7679d682f4a2b72a93b01
 	public void addLoading() {
 		add(loading);
 		validate();
 		repaint();
 	}
-	
+
 	public void displayRestaurants(ArrayList<Restaurant> list, JPanel gridDisplay) {
 
 		URL url = null;
@@ -298,60 +238,27 @@ public class FoodXFrame extends JFrame {
 			}
 		}
 	}
-
-	public void getRestaurants() {
-		gridHolder.removeAll();
-
-		new SwingWorker<Void, Object>() {
-            @Override
-            protected Void doInBackground() throws Exception {
-            	System.out.println("STARTING TO SEARCH");
-        		ArrayList<Restaurant> list = new ArrayList<Restaurant>();
-        		System.out.println("zip code received: " + zipCodeEnter.getText());
-        		if(!networkConnection()) {
-        			JOptionPane.showMessageDialog(null,
-	        				"No network connection","No network connection",JOptionPane.ERROR_MESSAGE
-	        		);
-        			return null;
-        		}
-        		list = cd.getRestaurantlist(zipCodeEnter.getText());
-        		System.out.println("Restaurants Received, Total Restaurants:" + list.size());
-        		
-        		if(list.isEmpty()) {
-	        		JOptionPane.showMessageDialog(null,
-	        				"No results found","No results found",JOptionPane.ERROR_MESSAGE
-	        		);
-        		}
-        		else {
-        			displayRestaurants(list, gridHolder);
-        		}
-        		
-        		validate();
-        		repaint();
-        		System.out.println("DONE WITH DISPLAYING");
-				return null;
-            }
-
-            @Override
-            protected void done() {
-            	FoodXFrame.this.remove(loading);
-            	FoodXFrame.this.repaint();
-            }
-        }.execute();
-		
-	}
 	
-	private boolean networkConnection() {
-		Socket socket = null;
-		boolean reachable = false;
-		try {
-			socket = new Socket("www.google.com", 80);
-			reachable = true;
+	class SendOrder implements MouseListener{
+		private Restaurant curr;
+		public SendOrder(Restaurant curr1){
+			curr = curr1;
 		}
-		catch (IOException e) {	}
-	    finally {            
-	    if (socket != null) try { socket.close(); } catch(IOException e) {}
+		
+		public void mouseClicked(MouseEvent e) {
+			System.out.println("Click at: " + e.getPoint());
+			Desktop d = Desktop.getDesktop();
+			try {
+				d.browse(new URI(curr.getOrderURL()));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			} catch (URISyntaxException e1) {
+				e1.printStackTrace();
+			}
 		}
-		return reachable;
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
 	}
 }
