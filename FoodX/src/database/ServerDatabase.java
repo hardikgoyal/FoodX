@@ -252,4 +252,35 @@ public class ServerDatabase {
 		return -1;
 	}
 
+	public void addLastZip(String user, String message) {
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL_CONSTANTS.INSERT + "userdetails" + "("
+					+ "userID" + "," + "zip" + ") VALUES (?,?)");
+			ps.setInt(1, getUserId(user));
+			ps.setString(2, message);
+			ps.execute();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public String getLastZip(String user) {
+		String zip = "";
+		try {
+			PreparedStatement ps = conn.prepareStatement(SQL_CONSTANTS.SELECT + "userdetails Where userID =?");
+			ps.setInt(1, getUserId(user));
+			
+			ResultSet rs = ps.executeQuery();
+			rs.last();
+			zip = rs.getString("zip");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return zip;
+		
+	}
+
 }
