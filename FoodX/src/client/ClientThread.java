@@ -96,7 +96,7 @@ public class ClientThread extends Thread {
 				ListRecieved.signalAll();
 				System.out.println("reslist initialised");
 				break;
-			case 101: 
+			case 4: 
 				zip = obj.getMessage();
 				ziplock.signalAll();
 				break;
@@ -189,7 +189,7 @@ public class ClientThread extends Thread {
 
 	public void addLastEntry(String zipcode) {
 		Message obj = new Message();
-		obj.setMessageID(100);
+		obj.setMessageID(4);
 		obj.setMessage(zipcode);
 		obj.setUser(user);
 		try {
@@ -205,7 +205,7 @@ public class ClientThread extends Thread {
 		
 		try {
 			Message obj = new Message();
-			obj.setMessageID(101);
+			obj.setMessageID(5);
 			obj.setUser(user);
 			clientOutputStream.writeObject(obj);
 			System.out.println("Last Zip-Code Request Sent");

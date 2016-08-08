@@ -273,7 +273,7 @@ public class ServerDatabase {
 			ps.setInt(1, getUserId(user));
 			
 			ResultSet rs = ps.executeQuery();
-			rs.last();
+			if (rs.last())
 			zip = rs.getString("zip");
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
