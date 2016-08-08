@@ -1,3 +1,4 @@
+
 package frame;
 
 import java.awt.BorderLayout;
@@ -67,6 +68,7 @@ public class FoodXFrame extends JFrame {
 		@Override
 		public void mouseReleased(MouseEvent e) {}
 	}
+	
 	private static final long serialVersionUID = 9183816558021947333L;
 //	public static void main(String[] args) {
 //		FoodXFrame fxf = new FoodXFrame(new Client());
