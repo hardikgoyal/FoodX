@@ -16,6 +16,7 @@ public class DataFetcher {
 	private class LatLon {
 		public String lat;
 		public String lon;
+		@SuppressWarnings("unused")
 		public LatLon(String lat, String lon) {
 			this.lat = lat;
 			this.lon = lon;
@@ -192,6 +193,7 @@ private static final String yelp_begin_url = "http://www.yelp.com/search?find_de
 		return restaurants;
 	}
 	
+	@SuppressWarnings("unused")
 	private String getLonAndLat(String zip) {
 		String lat = "&latitude=";
 		String lon = "&longitude=";
