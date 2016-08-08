@@ -30,22 +30,22 @@ public class NewUser extends JFrame {
 	private JTextField password1;
 	private JTextField repeat1;
 	private static MessageDigest md;
-	static Client cl;
+	private Client cl;
 	private String usernameText = null;
 	private String realpassword = null;
 	private String passwordText = null;
 	private String repeatText = null; 
-	
+	private AuthorizationPanel AP;
 
-	public NewUser(){
+	public NewUser(AuthorizationPanel ap, Client cl){
 		setTitle("New User");
-		
+		AP = ap;
 		setSize(640,480);
 		setLocation(200,200);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setBackground(Color.YELLOW);
 		setResizable(false);
-		cl = new Client();
+		this.cl= cl;
 		
 		//GradientPanel gradientPanel = new GradientPanel();
 		
@@ -113,7 +113,7 @@ public class NewUser extends JFrame {
 					else{
 						boolean canUse = register_user(usernameText, passwordText);
 						if (canUse){
-							AuthorizationPanel.AP.setVisible(false);
+							AP.setVisible(false);
 //								
 						}else{
 							username1.setText("");
@@ -135,8 +135,8 @@ public class NewUser extends JFrame {
 				realpassword = "";
 				passwordText = "";
 				repeatText = "";
-				AuthorizationPanel.nu.setVisible(false);
-				AuthorizationPanel.AP.setVisible(true);	
+				setVisible(false);
+				AP.setVisible(true);	
 			}
 		});
 		
@@ -211,7 +211,7 @@ public class NewUser extends JFrame {
 		repeat1.setText("");
 	}
 	
-	public static boolean register_user(String user, String password){
+	public boolean register_user(String user, String password){
 		String register = "Registered";
 		String result = cl.register_user(user, password);
 		if (result.equals(register)){

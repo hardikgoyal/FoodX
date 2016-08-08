@@ -11,6 +11,7 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import database.Message;
+import frame.AuthorizationPanel;
 import restaurant.Restaurant;
 
 public class ClientThread extends Thread {
@@ -22,6 +23,7 @@ public class ClientThread extends Thread {
 	private Lock mLock;
 	private ArrayList<Restaurant> reslist;
 	private String message;
+	private AuthorizationPanel ap;
 	public ClientThread(Socket socket, Client client) {
 		mLock = new ReentrantLock();
 		message = "";
@@ -36,7 +38,9 @@ public class ClientThread extends Thread {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		ap = new AuthorizationPanel(client);
 		start();
+		
 	}
 
 	public ArrayList<Restaurant> getRestaurant(String zipcode) {

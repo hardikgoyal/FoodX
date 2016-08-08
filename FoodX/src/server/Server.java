@@ -14,11 +14,11 @@ public class Server {
 	public Server(int port) {
 		try {
 			socket = new ServerSocket(port);
-//			while (true) {
+			while (true) {
 				Socket s = socket.accept();
 				new ServerThread(s, this);
 
-//			}
+			}
 
 		} catch (IOException e) {
 			e.printStackTrace();

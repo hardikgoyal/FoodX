@@ -8,7 +8,7 @@ import restaurant.Restaurant;
 
 public class Client {
 	public static void main(String args[]) {
-
+		new Client();
 	}
 	private ClientThread ct;
 

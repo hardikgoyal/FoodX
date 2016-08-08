@@ -37,7 +37,7 @@ import restaurant.Restaurant;
 public class FoodXFrame extends JFrame {
 	private static final long serialVersionUID = 9183816558021947333L;
 	public static void main(String[] args) {
-		FoodXFrame fxf = new FoodXFrame();
+		FoodXFrame fxf = new FoodXFrame(new Client());
 		fxf.setVisible(true);
 	}
 
@@ -50,9 +50,9 @@ public class FoodXFrame extends JFrame {
 	private JPanel loading;
 	private Client cd;
 
-	public FoodXFrame() {
+	public FoodXFrame(Client cd) {
 
-		cd = new Client();
+		this.cd = cd;
 		// MAIN GUI
 		setTitle("Welcome to FoodX");
 		setSize(860, 580);
