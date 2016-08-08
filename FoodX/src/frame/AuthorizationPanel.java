@@ -45,7 +45,7 @@ public class AuthorizationPanel extends JFrame {
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		setResizable(false);
 		cl = client;
-		mainframe = new FoodXFrame(cl);
+		//mainframe = new FoodXFrame(cl);
 		nu = new NewUser(this, cl);
 		//Interactive Options
 		JLabel username = new JLabel("User Name");
@@ -90,7 +90,8 @@ public class AuthorizationPanel extends JFrame {
 				boolean isUser = authenticate_user(usernameText, passwordText);
 				if (isTyped && isUser){
 					setVisible(false);
-					mainframe.setVisible(true);
+					mainframe = new FoodXFrame(cl, "user");
+					//mainframe.setVisible(true);
 
 				}
 				else{
@@ -119,7 +120,8 @@ public class AuthorizationPanel extends JFrame {
 				//boolean isUser = authenticate_user("guest", "Guest1");
 				//if (isUser){
 				setVisible(false);
-				mainframe.setVisible(true);
+				mainframe = new FoodXFrame(cl, "guest");
+				//mainframe.setVisible(true);
 				//}
 			}
 		});

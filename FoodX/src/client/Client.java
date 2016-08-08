@@ -42,8 +42,5 @@ public class Client {
 		return ct.getRestaurant(zipcode);
 
 	}
-	/*
-	public void addLastZip(String zipcode){
-		ct.addZip(zipcode);
-	}*/
+
 }
