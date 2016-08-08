@@ -122,12 +122,14 @@ public class FoodXFrame extends JFrame {
 			public void windowClosing(WindowEvent e) {
 				// TODO Auto-generated method stub
 				cd.addLastEntry(zipCodeEnter.getText());
+				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
 			}
 
 			@Override
 			public void windowClosed(WindowEvent e) {
 				// TODO Auto-generated method stub
 				cd.addLastEntry(zipCodeEnter.getText());
+				System.out.println("added last entry (frame): " + zipCodeEnter.getText());
 			}
 			
 		});
@@ -138,6 +140,8 @@ public class FoodXFrame extends JFrame {
 		public void actionPerformed(ActionEvent e) {
 			addLoading();
 			getRestaurants();
+			cd.addLastEntry(zipCodeEnter.getText());
+			System.out.println("added last entry (frame): " + zipCodeEnter.getText());
 		}
 	}
 	
