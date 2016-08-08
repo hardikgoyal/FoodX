@@ -28,6 +28,11 @@ import client.Client;
 public class AuthorizationPanel extends JFrame {
 
 	static class GradientPanel extends JPanel {
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -231022671330894227L;
+
 		@Override
 		protected void paintComponent(Graphics g) {
 			super.paintComponent(g);

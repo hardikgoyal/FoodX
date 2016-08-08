@@ -21,10 +21,15 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import client.Client;
-
+@SuppressWarnings("unused")
 public class NewUser extends JFrame {
 	static class GradientPanel extends JPanel {
-        @Override
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1610217316630458378L;
+
+		@Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             int w = getWidth(); 
@@ -39,7 +44,9 @@ public class NewUser extends JFrame {
 	private AuthorizationPanel AP;
 	private Client cl;
 	private JTextField password1;
+
 	private String passwordText = null;
+	
 	private String realpassword = null;
 	private JTextField repeat1;
 	private String repeatText = null; 
