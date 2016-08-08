@@ -1,7 +1,9 @@
 package frame;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -19,8 +21,10 @@ import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -58,6 +62,7 @@ public class FoodXFrame extends JFrame {
 		setSize(860, 580);
 		setLocation(200, 200);
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setResizable(false);
 
 		// Enter zip-code at top of panel
 		JLabel zipCodeLabel = new JLabel("Please Enter a Zip Code ... ");
@@ -89,6 +94,7 @@ public class FoodXFrame extends JFrame {
 		icon.setImageObserver(loading);
 		loading.add(new JLabel(icon), BorderLayout.CENTER);
 		
+		/*
 		search.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {				
@@ -96,6 +102,17 @@ public class FoodXFrame extends JFrame {
 				getRestaurants();		
 			}
 		});
+		*/
+		search.addActionListener(new LoadRestaurants());
+		zipCodeEnter.addActionListener(new LoadRestaurants());
+	}
+	
+	class LoadRestaurants implements ActionListener{
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			addLoading();
+			getRestaurants();
+		}
 	}
 	
 	public void getRestaurants() {
