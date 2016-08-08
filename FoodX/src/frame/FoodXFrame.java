@@ -57,6 +57,7 @@ public class FoodXFrame extends JFrame {
 	public FoodXFrame(Client cd) {
 
 		this.cd = cd;
+		
 		// MAIN GUI
 		setTitle("Welcome to FoodX");
 		setSize(860, 580);
