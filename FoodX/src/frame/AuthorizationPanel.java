@@ -91,7 +91,7 @@ public class AuthorizationPanel extends JFrame {
 				if (isTyped && isUser){
 					setVisible(false);
 					mainframe = new FoodXFrame(cl, "user");
-					//mainframe.setVisible(true);
+					mainframe.setVisible(true);
 
 				}
 				else{
@@ -121,7 +121,7 @@ public class AuthorizationPanel extends JFrame {
 				//if (isUser){
 				setVisible(false);
 				mainframe = new FoodXFrame(cl, "guest");
-				//mainframe.setVisible(true);
+				mainframe.setVisible(true);
 				//}
 			}
 		});
